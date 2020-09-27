@@ -12,10 +12,10 @@ export class RolEntity {
     @Column()
     descripcion: string;
 
-    @ManyToMany(
+    /*@ManyToMany(
         type => UsuarioEntity,
         usuarios => usuarios.roles
     )
     @JoinTable()
-    usuarios: UsuarioEntity[]
+    usuarios: UsuarioEntity[]*/
 }

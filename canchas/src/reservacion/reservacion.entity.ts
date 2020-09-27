@@ -31,7 +31,7 @@ export class ReservacionEntity{
 
     @ManyToMany(
         type => EquipoEntity,
-        equipos => equipos.reservaciones
+        //equipos => equipos.reservaciones
     )
     @JoinTable()
     equipos: EquipoEntity[]

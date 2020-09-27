@@ -12,11 +12,11 @@ export class EquipoEntity{
     @Column()
     descripcion: string;
 
-    @ManyToMany(
+    /*@ManyToMany(
         type => ReservacionEntity,
         reservaciones => reservaciones.equipos
     )
     @JoinTable()
-    reservaciones: ReservacionEntity[]
+    reservaciones: ReservacionEntity[]*/
 
 }

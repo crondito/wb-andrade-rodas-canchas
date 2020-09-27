@@ -32,7 +32,7 @@ export class UsuarioEntity {
 
     @ManyToMany(
         type => RolEntity,
-        roles => roles.usuarios
+        //roles => roles.usuarios
     )
     @JoinTable()
     roles: RolEntity[]
