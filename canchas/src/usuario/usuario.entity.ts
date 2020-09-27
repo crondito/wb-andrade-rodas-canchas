@@ -1,7 +1,8 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {TelefonoEntity} from "../telefono/telefono.entity";
 import {ReservacionEntity} from "../reservacion/reservacion.entity";
 import {RolEntity} from "../rol/rol.entity";
+import {EquipoEntity} from "../equipo/equipo.entity";
 
 @Entity()
 export class UsuarioEntity {
@@ -28,5 +29,12 @@ export class UsuarioEntity {
         reservacion => reservacion.usuario
     )
     reservaciones: ReservacionEntity[];
+
+    @ManyToMany(
+        type => RolEntity,
+        roles => roles.usuarios
+    )
+    @JoinTable()
+    roles: RolEntity[]
 
 }
