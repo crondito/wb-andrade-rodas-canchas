@@ -14,12 +14,17 @@ import {ReservacionEntity} from "./reservacion/reservacion.entity";
 import {RolEntity} from "./rol/rol.entity";
 import {TelefonoEntity} from "./telefono/telefono.entity";
 import {UsuarioEntity} from "./usuario/usuario.entity";
+import {ReservaEquipoModule} from "./reservaEquipo/reservaEquipo.module";
+import {ReservaEquipoEntity} from "./reservaEquipo/reservaEquipo.entity";
+
+// Many-to-Many relationships https://codeburst.io/typeorm-by-example-part-7-97025823adff
 
 @Module({
   imports: [
       CanchaModule,
       EquipoModule,
       ReservacionModule,
+      ReservaEquipoModule,
       RolModule,
       TelefonoModule,
       UsuarioModule,
@@ -36,12 +41,13 @@ import {UsuarioEntity} from "./usuario/usuario.entity";
             CanchaEntity,
             EquipoEntity,
             ReservacionEntity,
+            ReservaEquipoEntity,
             RolEntity,
             TelefonoEntity,
             UsuarioEntity
         ],
         synchronize: true, // Actualizar el esquema de la base de datso
-        dropSchema: false //Eliminar Datos y el Esquema de base de datos //true para borrar  y volver a generar
+        dropSchema: true, //Eliminar Datos y el Esquema de base de datos //true para borrar  y volver a generar
       })
   ],
   controllers: [AppController],

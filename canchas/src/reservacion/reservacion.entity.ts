@@ -1,7 +1,8 @@
-import {Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {UsuarioEntity} from "../usuario/usuario.entity";
 import {CanchaEntity} from "../cancha/cancha.entity";
 import {EquipoEntity} from "../equipo/equipo.entity";
+import {ReservaEquipoEntity} from "../reservaEquipo/reservaEquipo.entity";
 
 @Entity()
 export class ReservacionEntity{
@@ -29,10 +30,16 @@ export class ReservacionEntity{
     )
     cancha: CanchaEntity;
 
-    @ManyToMany(
+    @OneToMany(
+        type => ReservaEquipoEntity,
+        reservacionEquipos => reservacionEquipos.reservaciones
+    )
+    reservacionEquipos: ReservaEquipoEntity[];
+
+    /*@ManyToMany(
         type => EquipoEntity,
         //equipos => equipos.reservaciones
     )
     @JoinTable()
-    equipos: EquipoEntity[]
+    equipos: EquipoEntity[]*/
 }
