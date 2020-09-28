@@ -13,6 +13,12 @@ export class UsuarioEntity {
     numeroCedula: string;
 
     @Column()
+    numeroPasaporte: string;
+
+    @Column()
+    numeroRuc: string;
+
+    @Column()
     nombre: string;
 
     @Column()
