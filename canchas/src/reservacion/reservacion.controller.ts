@@ -1,11 +1,11 @@
 import {Controller, Get, Res} from "@nestjs/common";
 
-@Controller("reservacion")
+@Controller("reservaciones")
 export class ReservacionController {
-    @Get("home")
+    @Get()
     vistaHome(
         @Res() res
     ){
-        res.render("principal/home")
+        res.render("reservacion/reservaciones")
     }
 }

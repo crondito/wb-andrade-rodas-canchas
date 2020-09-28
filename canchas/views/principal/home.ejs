@@ -7,16 +7,29 @@
     <style>
 
     </style>
-    <%- include("../compartido/estilos-generales/estilos-generales-component.ejs")%>
+    <%- include("../compartido/estilos-generales/estilos-generales-component.ejs") %>
 
 </head>
 <body>
 
-<%- include("../compartido/nav-bar/nav-bar-component.ejs")  %>
-
-<h1>HOLA</h1>
+<%- include("../compartido/nav-bar/nav-bar-component.ejs") %>
 
 
-<%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs")%>
+<form action="/usuario/vista/inicio"
+      method="get">
+    <div class="form-group">
+        <label for="busqueda">Búsqueda:</label>
+        <input id="busqueda" type="text" name="busqueda">
+    </div>
+    <div class="container form-group">
+        <button type="submit" class="btn btn-secondary"> Buscar</button>
+    </div>
+    <div class="container form-group">
+        <img src="/cancha.svg" alt="Icono de una cancha">
+        <p>0 canchas disponibles</p>
+    </div>
+</form>
+
+<%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>
 </body>
 </html>
