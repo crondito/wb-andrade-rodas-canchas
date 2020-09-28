@@ -2,9 +2,8 @@ import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn
 import {TelefonoEntity} from "../telefono/telefono.entity";
 import {ReservacionEntity} from "../reservacion/reservacion.entity";
 import {RolEntity} from "../rol/rol.entity";
-import {EquipoEntity} from "../equipo/equipo.entity";
 
-@Entity()
+@Entity("usuario")
 export class UsuarioEntity {
     @PrimaryGeneratedColumn()
     id: number;

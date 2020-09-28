@@ -1,7 +1,7 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ReservacionEntity} from "../reservacion/reservacion.entity";
 
-@Entity()
+@Entity("cancha")
 export class CanchaEntity{
     @PrimaryGeneratedColumn()
     id: number;

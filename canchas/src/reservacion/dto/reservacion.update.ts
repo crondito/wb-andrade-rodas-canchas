@@ -1,4 +1,4 @@
-import {IsAlpha, IsDate, IsNotEmpty, MaxLength, MinDate, MinLength} from "class-validator";
+import {IsAlpha, IsDate, IsNotEmpty, IsNumber, IsPositive, MaxLength, MinDate, MinLength} from "class-validator";
 const todayDate = new Date()
 export class ReservacionUpdateDTO {
     @IsNotEmpty()
@@ -16,4 +16,9 @@ export class ReservacionUpdateDTO {
     @MinLength(3)
     @MaxLength(60)
     estado: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    @IsPositive()
+    tiempoReservacion: number;
 }

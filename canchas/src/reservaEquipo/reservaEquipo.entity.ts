@@ -2,7 +2,7 @@ import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {ReservacionEntity} from "../reservacion/reservacion.entity";
 import {EquipoEntity} from "../equipo/equipo.entity";
 
-@Entity()
+@Entity("reserva_equipo")
 export class ReservaEquipoEntity {
     @PrimaryGeneratedColumn()
     id: number;

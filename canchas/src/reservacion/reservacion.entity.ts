@@ -4,7 +4,7 @@ import {CanchaEntity} from "../cancha/cancha.entity";
 import {EquipoEntity} from "../equipo/equipo.entity";
 import {ReservaEquipoEntity} from "../reservaEquipo/reservaEquipo.entity";
 
-@Entity()
+@Entity("reservacion")
 export class ReservacionEntity{
     @PrimaryGeneratedColumn()
     id: number;
@@ -13,7 +13,10 @@ export class ReservacionEntity{
     fechaRegistro: Date;
 
     @Column()
-    fechaHoraReserva: Date;
+    fechaHoraReservacion: Date;
+
+    @Column()
+    tiempoReservacion: number;
 
     @Column()
     estado: string;

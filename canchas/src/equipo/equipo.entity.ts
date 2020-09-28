@@ -2,7 +2,7 @@ import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn
 import {ReservacionEntity} from "../reservacion/reservacion.entity";
 import {ReservaEquipoEntity} from "../reservaEquipo/reservaEquipo.entity";
 
-@Entity()
+@Entity("equipo")
 export class EquipoEntity{
     @PrimaryGeneratedColumn()
     id: number;
