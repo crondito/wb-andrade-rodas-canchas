@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8"/>
-    <title>Crear Rol</title>
+    <% const existeRol= typeof rol!= "undefined"%>
+    <title><%= existeRol ? "Editar": "Crear"%> Rol</title>
 
     <style>
 
@@ -13,7 +14,7 @@
 <body>
 
 <!--Banderas para comprobar variables usadas luego-->
-<% const existeRol= typeof rol!= "undefined"%>
+
 <% let existeError= typeof error!= "undefined"%>
 <% let existeNombreError= typeof nombreError!= "undefined"%>
 <% let existeDescripcionError= typeof descripcionError!= "undefined"%>

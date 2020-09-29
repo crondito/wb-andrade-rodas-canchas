@@ -12,6 +12,7 @@ import {RolCreateDTO} from "./dto/rol.create";
 import {validate, ValidationError} from "class-validator";
 import {RolService} from "./rol.service";
 import {RolEntity} from "./rol.entity";
+import {RolUpdateDTO} from "./dto/rol.update";
 
 @Controller("roles")
 export class RolController{
@@ -112,18 +113,47 @@ export class RolController{
         @Body() parametrosCuerpo,
         @Res() res
     ){
-        const rolEditado = {
-            id: Number(parametrosRuta.id),
-            nombre: parametrosCuerpo.nombre,
-            descripcion: parametrosCuerpo.descripcion
-        } as RolEntity;
-        try{
-            await this._rolService.editarUno(rolEditado)
-            return res.redirect("/roles?mensaje=Rol editado");
-        } catch (error){
-            console.log(error);
-            return res.redirect("/roles?error=Error editando rol")
+        const rolEditadoValidado = new RolUpdateDTO();
+        rolEditadoValidado.nombre = parametrosCuerpo.nombre;
+        rolEditadoValidado.descripcion = parametrosCuerpo.descripcion;
+
+        let nombreConsulta, descripcionConsulta, nombreError="", descripcionError="";
+        try {
+            const errores: ValidationError[] = await validate(rolEditadoValidado)
+            if(errores.length > 0) {
+                console.log("Errores", errores);
+                for (const error of errores) {
+                    if (error["property"] == "nombre") {
+                        nombreError = "nombreError=Error en nombre de equipo"
+                    } else if (error["property"] == "descripcion") {
+                        descripcionError = "&descripcionError=Error en descripcion de equipo"
+                    }
+                }
+                nombreConsulta = `&nombre=${parametrosCuerpo.nombre}`
+                descripcionConsulta = `&descripcion=${parametrosCuerpo.descripcion}`
+                return res.redirect("/roles/editar/" + parametrosRuta.id + "?=" + nombreError + descripcionError + nombreConsulta + descripcionConsulta)
+            } else {
+                const rolEditado = {
+                    id: Number(parametrosRuta.id),
+                    nombre: parametrosCuerpo.nombre,
+                    descripcion: parametrosCuerpo.descripcion
+                } as RolEntity;
+                let respuestaEdicionRol;
+                try{
+                    respuestaEdicionRol = await this._rolService
+                        .editarUno(rolEditado)
+                    return res.redirect("/roles?mensaje=Rol editado");
+                } catch (error){
+                    console.log(error);
+                    return res.redirect("/roles?error=Error editando rol")
+                }
+                return res.redirect("/roles")
+            }
+        }catch (e) {
+            console.error("Error",e);
+            throw new BadRequestException("Error validando")
         }
+
     }
 
     @Get("editar/:id")

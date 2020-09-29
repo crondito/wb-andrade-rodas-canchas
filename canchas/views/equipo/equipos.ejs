@@ -11,6 +11,10 @@
 
 </head>
 <body>
+
+<% const existeError= typeof parametrosConsulta.error!= "undefined"%>
+<% const existeMensaje= typeof parametrosConsulta.mensaje!= "undefined"%>
+
 <% const activeDict={
     "inicio": false,
     "reservacion":false,
@@ -23,6 +27,16 @@
 <%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 <div class="container">
     <h1>Equipos</h1>
+    <% if (existeError){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= parametrosConsulta.error%>
+        </div>
+    <% } %>
+    <% if(existeMensaje) { %>
+        <div class="alert alert-success" role="alert">
+            <%= parametrosConsulta.mensaje%>
+        </div>
+    <%}%>
     <div class="row">
         <% const today = new Date();
         const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -36,6 +50,36 @@
             </a>
         </div>
     </div>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% let counter = 1%>
+        <% arregloEquipos.forEach((equipoObjeto) => { %>
+            <tr>
+                <th scope="row"><%= counter%></th>
+                <td><%= equipoObjeto.nombre%></td>
+                <td><%= equipoObjeto.descripcion%></td>
+                <td>
+                    <a href="/equipos/editar/<%= equipoObjeto.id%>">
+                        <button type="submit" class="btn btn-secondary">Detalles</button>
+                    </a>
+                    <form action="/equipos/eliminarDesdeVista/<%= equipoObjeto.id%>"
+                          method="post">
+                        <button type="submit" class="btn btn-secondary">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <% counter+=1%>
+        <%})%>
+        </tbody>
+    </table>
 </div>
 
 <%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>
