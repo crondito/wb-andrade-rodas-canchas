@@ -11,8 +11,16 @@
 
 </head>
 <body>
-
-<%- include("../compartido/nav-bar/nav-bar-component.ejs") %>
+<% const activeDict={
+    "inicio": true,
+    "reservacion":false,
+    "cliente": false,
+    "usuario": false,
+    "cancha": false,
+    "equipo": false,
+    "rol": false,
+}%>
+<%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 
 <div class="container">
     <h1>Bienvenido!</h1>
