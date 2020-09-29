@@ -12,7 +12,16 @@
 </head>
 <body>
 
-<%- include("../compartido/nav-bar/nav-bar-component.ejs") %>
+<% const activeDict={
+    "inicio": false,
+    "reservacion":false,
+    "cliente": false,
+    "usuario": false,
+    "cancha": true,
+    "equipo": false,
+    "rol": false,
+}%>
+<%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 
 <form>
     <div class="form-row">
