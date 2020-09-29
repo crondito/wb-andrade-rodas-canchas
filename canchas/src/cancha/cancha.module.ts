@@ -17,6 +17,9 @@ import {CanchaService} from "./cancha.service";
     ],
     providers: [
         CanchaService
+    ],
+    exports: [
+        CanchaService
     ]
 }) export class CanchaModule {
 

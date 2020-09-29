@@ -35,6 +35,14 @@ export class CanchaService{
     buscarUno(id: number){
         return this.repositorio.findOne(id) //Promesa
     }
+    buscarCanchasDisponibles(){
+        const consulta: FindManyOptions<CanchaEntity>={
+            where: {
+                estado: "Disponible"
+            }
+        }
+        return this.repositorio.findAndCount(consulta)
+    }
     editarUno(canchaEditado: CanchaEntity){
         return this.repositorio.save(canchaEditado);
     }
