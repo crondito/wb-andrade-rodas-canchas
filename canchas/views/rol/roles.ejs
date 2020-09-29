@@ -12,34 +12,34 @@
 </head>
 <body>
 
-<% const existeError= typeof parametrosConsulta.error!= "undefined"%>
-<% const existeMensaje= typeof parametrosConsulta.mensaje!= "undefined"%>
+<% const existeError = typeof parametrosConsulta.error != "undefined" %>
+<% const existeMensaje = typeof parametrosConsulta.mensaje != "undefined" %>
 
-<% const activeDict={
+<% const activeDict = {
     "inicio": false,
-    "reservacion":false,
+    "reservacion": false,
     "cliente": false,
     "usuario": false,
     "cancha": false,
     "equipo": false,
     "rol": true,
-}%>
+} %>
 <%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 <div class="container">
     <h1>Roles</h1>
     <% if (existeError){ %>
         <div class="alert alert-danger" role="alert">
-            <%= parametrosConsulta.error%>
+            <%= parametrosConsulta.error %>
         </div>
     <% } %>
     <% if(existeMensaje) { %>
         <div class="alert alert-success" role="alert">
-            <%= parametrosConsulta.mensaje%>
+            <%= parametrosConsulta.mensaje %>
         </div>
-    <%}%>
+    <% } %>
     <div class="row">
         <% const today = new Date();
-        const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         %>
         <div class="col-lg-1">
             <%= date %>
@@ -60,24 +60,24 @@
         </tr>
         </thead>
         <tbody>
-        <% let counter = 1%>
+        <% let counter = 1 %>
         <% arregloRoles.forEach((rolObjeto) => { %>
-        <tr>
-            <th scope="row"><%= counter%></th>
-            <td><%= rolObjeto.nombre%></td>
-            <td><%= rolObjeto.descripcion%></td>
-            <td>
-                <a href="/roles/editar/<%= rolObjeto.id%>">
-                    <button type="submit" class="btn btn-secondary">Detalles</button>
-                </a>
-                <form action="/roles/eliminarDesdeVista/<%= rolObjeto.id%>"
-                    method="post">
-                    <button type="submit" class="btn btn-secondary">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-        <% counter+=1%>
-        <%})%>
+            <tr>
+                <th scope="row"><%= counter %></th>
+                <td><%= rolObjeto.nombre %></td>
+                <td><%= rolObjeto.descripcion %></td>
+                <td>
+                    <a href="/roles/editar/<%= rolObjeto.id %>">
+                        <button type="submit" class="btn btn-secondary">Detalles</button>
+                    </a>
+                    <form action="/roles/eliminarDesdeVista/<%= rolObjeto.id %>"
+                          method="post">
+                        <button type="submit" class="btn btn-secondary">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <% counter += 1 %>
+        <% }) %>
         </tbody>
     </table>
 </div>

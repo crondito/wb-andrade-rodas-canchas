@@ -2,6 +2,7 @@ import {Module} from "@nestjs/common";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {CanchaEntity} from "./cancha.entity";
 import {CanchaController} from "./cancha.controller";
+import {CanchaService} from "./cancha.service";
 
 @Module({
     controllers: [CanchaController],
@@ -14,7 +15,9 @@ import {CanchaController} from "./cancha.controller";
                 "default"
             )
     ],
-    providers: []
+    providers: [
+        CanchaService
+    ]
 }) export class CanchaModule {
 
 }

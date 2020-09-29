@@ -54,11 +54,11 @@
           method="post">
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="inputRolName">Nombre del Equipo</label>
+                <label for="inputEquipoName">Nombre del Equipo</label>
                 <input
                         type="text"
                         class="form-control <%= existeNombreError ? "is-invalid":""%>"
-                        id="inputRolName"
+                        id="inputEquipoName"
                         name="nombre"
                         value="<%= existeNombre ? nombre: "" %>"
                         placeholder="Ingrese el nombre del equipo, por ejemplo balón de fútbol">
@@ -69,11 +69,11 @@
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="inputRolDescription">Descripción</label>
+                <label for="inputEquipoDescription">Descripción</label>
                 <input
                         type="text"
                         class="form-control <%= existeDescripcionError ? "is-invalid":""%>"
-                        id="inputRolDescription"
+                        id="inputEquipoDescription"
                         name="descripcion"
                         value="<%= existeDescripcion ? descripcion: ""%>">
                 <div class="invalid-feedback">
