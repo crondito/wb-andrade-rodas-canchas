@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8"/>
-    <title>Home</title>
+    <title>Clientes</title>
 
     <style>
 
@@ -14,7 +14,7 @@
 
 <%- include("../compartido/nav-bar/nav-bar-component.ejs") %>
 <div class="container">
-    <h1>Usuarios</h1>
+    <h1>Clientes</h1>
     <div class="row">
         <% const today = new Date();
         const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -23,8 +23,8 @@
             <%= date %>
         </div>
         <div class="col-lg-2">
-            <a href="/usuarios/crear">
-                <button type="submit" class="btn btn-secondary">Nuevo Usuario</button>
+            <a href="/usuarios/crear/cliente">
+                <button type="submit" class="btn btn-secondary">Nuevo Cliente</button>
             </a>
         </div>
     </div>

@@ -15,6 +15,9 @@ export class CanchaEntity{
     @Column()
     tipo: string;
 
+    @Column()
+    estado: string;
+
     @OneToMany(
         type => ReservacionEntity,
         reservacion => reservacion.cancha

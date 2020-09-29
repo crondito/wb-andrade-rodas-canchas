@@ -14,4 +14,6 @@ export class CanchaUpdateDTO{
     @IsAlpha()
     tipo: string;
 
+    @IsNotEmpty()
+    estado: string;
 }

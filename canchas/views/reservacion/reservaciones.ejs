@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8"/>
-    <title>Home</title>
+    <title>Reservaciones</title>
 
     <style>
 
@@ -13,8 +13,23 @@
 <body>
 
 <%- include("../compartido/nav-bar/nav-bar-component.ejs") %>
+<div class="container">
+    <h1>Reservaciones</h1>
+    <div class="row">
+        <% const today = new Date();
+        const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        %>
+        <div class="col-lg-1">
+            <%= date %>
+        </div>
+        <div class="col-lg-2">
+            <a href="/reservaciones/crear">
+                <button type="submit" class="btn btn-secondary">Nueva Reservación</button>
+            </a>
+        </div>
 
-<h1>Reservaciones</h1>
+    </div>
+</div>
 
 <%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>
 </body>

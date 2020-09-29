@@ -1,6 +1,6 @@
 import {IsAlpha, IsNotEmpty, MaxLength, MinLength} from "class-validator";
 
-export class CanchaCreateDTO{
+export class CanchaCreateDTO {
 
     @IsNotEmpty()
     @IsAlpha()
@@ -13,5 +13,8 @@ export class CanchaCreateDTO{
 
     @IsAlpha()
     tipo: string;
+
+    @IsNotEmpty()
+    estado: string;
 
 }

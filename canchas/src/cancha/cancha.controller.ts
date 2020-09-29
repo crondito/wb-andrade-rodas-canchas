@@ -1,18 +1,19 @@
 import {Controller, Get, Res} from "@nestjs/common";
 
-@Controller("reservaciones")
-export class ReservacionController {
+@Controller("canchas")
+export class CanchaController {
     @Get()
     vistaHome(
         @Res() res
     ){
-        res.render("reservacion/reservaciones")
+        res.render("cancha/canchas")
     }
 
     @Get("crear")
     vistaCrear(
         @Res() res
     ){
-        res.render("reservacion/crear-reservacion")
+        res.render("cancha/crear-cancha")
     }
+
 }
