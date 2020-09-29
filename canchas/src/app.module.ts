@@ -47,7 +47,7 @@ import {ReservaEquipoEntity} from "./reservaEquipo/reservaEquipo.entity";
             UsuarioEntity
         ],
         synchronize: true, // Actualizar el esquema de la base de datso
-        dropSchema: true, //Eliminar Datos y el Esquema de base de datos //true para borrar  y volver a generar
+        dropSchema: false, //Eliminar Datos y el Esquema de base de datos //true para borrar  y volver a generar
       })
   ],
   controllers: [AppController],

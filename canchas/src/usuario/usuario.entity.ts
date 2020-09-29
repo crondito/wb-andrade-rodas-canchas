@@ -1,9 +1,12 @@
-import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {TelefonoEntity} from "../telefono/telefono.entity";
 import {ReservacionEntity} from "../reservacion/reservacion.entity";
 import {RolEntity} from "../rol/rol.entity";
 
 @Entity("usuario")
+@Unique(["numeroCedula"])
+@Unique(["numeroPasaporte"])
+@Unique(["numeroRuc"])
 export class UsuarioEntity {
     @PrimaryGeneratedColumn()
     id: number;

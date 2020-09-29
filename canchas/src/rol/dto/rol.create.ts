@@ -7,6 +7,6 @@ export class RolCreateDTO {
     @MaxLength(60)
     nombre: string;
 
-    @IsAlpha()
+    @MinLength(3)
     descripcion: string;
 }

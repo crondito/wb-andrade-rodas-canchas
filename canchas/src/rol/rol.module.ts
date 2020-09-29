@@ -2,6 +2,7 @@ import {Module} from "@nestjs/common";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {RolEntity} from "./rol.entity";
 import {RolController} from "./rol.controller";
+import {RolService} from "./rol.service";
 
 @Module({
     controllers: [RolController],
@@ -14,7 +15,9 @@ import {RolController} from "./rol.controller";
                 "default"
             )
     ],
-    providers: []
+    providers: [
+        RolService
+    ]
 }) export class RolModule {
 
 }
