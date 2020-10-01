@@ -4,7 +4,8 @@ import {
     Controller,
     Get,
     InternalServerErrorException,
-    NotFoundException, Param,
+    NotFoundException,
+    Param,
     Post,
     Query,
     Res
@@ -59,12 +60,12 @@ export class UsuarioController {
         }
     }
 
-    @Get("clientes")
-    vistaClientes(
-        @Res() res
-    ){
-        res.render("usuario/clientes")
-    }
+    // @Get("clientes")
+    // vistaClientes(
+    //     @Res() res
+    // ){
+    //     res.render("usuario/clientes")
+    // }
 
     // @Get("crear")
     // vistaCrear(
@@ -87,8 +88,8 @@ export class UsuarioController {
                 nombre: parametrosConsulta.nombre,
                 apellido: parametrosConsulta.apellido,
                 numeroCedula: parametrosConsulta.numeroCedula,
-                numeroPasaporte: parametrosConsulta.numeroPasaporte,
-                numeroRuc: parametrosConsulta.numeroRuc,
+                // numeroPasaporte: parametrosConsulta.numeroPasaporte,
+                // numeroRuc: parametrosConsulta.numeroRuc,
                 telefono: parametrosConsulta.telefono,
             }
         )
@@ -107,7 +108,7 @@ export class UsuarioController {
         // usuarioValidado.numeroRuc = parametrosCuerpo.numeroRuc;
         usuarioValidado.telefono = parametrosCuerpo.telefono;
 
-        let nombreConsulta, apellidoConsulta, nombreError="", apellidoError="";
+        let nombreConsulta, apellidoConsulta, numeroCedulaConsulta, telefonoConsulta, nombreError="", apellidoError="";
         try {
             const errores: ValidationError[] = await validate(usuarioValidado);
             if(errores.length > 0){
@@ -117,11 +118,17 @@ export class UsuarioController {
                         nombreError = "nombreError=Error en nombre de Usuario"
                     }else if(error["property"]=="apellido"){
                         apellidoError = "&apellidoError=Error en apellido de Usuario"
+                    }else if(error["property"]=="numeroCedula"){
+                        apellidoError = "&apellidoError=Error en cedula de Usuario"
+                    }else if(error["property"]=="telefono"){
+                        apellidoError = "&apellidoError=Error en teléfono de Usuario"
                     }
                 }
                 nombreConsulta = `&nombre=${parametrosCuerpo.nombre}`
                 apellidoConsulta = `&apellido=${parametrosCuerpo.apellido}`
-                return res.redirect("/usuarios/crear?="+nombreError+apellidoError+nombreConsulta+apellidoConsulta)
+                numeroCedulaConsulta = `&numeroCedula=${parametrosCuerpo.numeroCedula}`
+                telefonoConsulta = `&telefono=${parametrosCuerpo.telefono}`
+                return res.redirect("/usuarios/crear?="+nombreError+apellidoError+nombreConsulta+apellidoConsulta+numeroCedulaConsulta+telefonoConsulta)
             } else {
                 let respuestaCreacionUsuario;
                 try {
