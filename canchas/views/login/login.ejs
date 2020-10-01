@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Login</title>
+    <h2>Login</h2>
+    <style>
+    </style>
+    <%- include("../compartido/estilos-generales/estilos-generales-component.ejs") %>
+</head>
+
+<body>
+
+<form action="/login" method="POST">
+    <label for="usuarioId">Usuario</label>
+    <input id="usuarioId"
+           type="text"
+           name="usuario">
+    <br>
+    <label for="passwordId">Password</label>
+    <input id="passwordId"
+           type="password"
+           name="password">
+    <br>
+    <button type="submit">Log in</button>
+
+</form>
+<%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>
+</body>
+
+</html>
