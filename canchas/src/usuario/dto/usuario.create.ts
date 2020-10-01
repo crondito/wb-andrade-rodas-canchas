@@ -27,7 +27,7 @@ export class UsuarioCreateDTO {
 
     // @IsAlpha()
     // comentario: string;
-    //
-    // @IsAlpha()
-    // tipo: string;
+
+    @IsAlpha()
+    tipo: string;
 }

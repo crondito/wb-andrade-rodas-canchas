@@ -91,6 +91,7 @@ export class UsuarioController {
                 // numeroPasaporte: parametrosConsulta.numeroPasaporte,
                 // numeroRuc: parametrosConsulta.numeroRuc,
                 telefono: parametrosConsulta.telefono,
+                tipo: parametrosConsulta.tipo,
             }
         )
     }
@@ -107,8 +108,9 @@ export class UsuarioController {
         // usuarioValidado.numeroPasaporte = parametrosCuerpo.numeroPasaporte;
         // usuarioValidado.numeroRuc = parametrosCuerpo.numeroRuc;
         usuarioValidado.telefono = parametrosCuerpo.telefono;
+        usuarioValidado.tipo = parametrosCuerpo.tipo;
 
-        let nombreConsulta, apellidoConsulta, numeroCedulaConsulta, telefonoConsulta, nombreError="", apellidoError="";
+        let nombreConsulta, apellidoConsulta, numeroCedulaConsulta, telefonoConsulta, tipoConsulta, nombreError="", apellidoError="";
         try {
             const errores: ValidationError[] = await validate(usuarioValidado);
             if(errores.length > 0){
@@ -116,19 +118,16 @@ export class UsuarioController {
                 for(const error of errores){
                     if(error["property"]=="nombre"){
                         nombreError = "nombreError=Error en nombre de Usuario"
-                    }else if(error["property"]=="apellido"){
+                    }else if(error["property"]=="apellido") {
                         apellidoError = "&apellidoError=Error en apellido de Usuario"
-                    }else if(error["property"]=="numeroCedula"){
-                        apellidoError = "&apellidoError=Error en cedula de Usuario"
-                    }else if(error["property"]=="telefono"){
-                        apellidoError = "&apellidoError=Error en teléfono de Usuario"
                     }
                 }
                 nombreConsulta = `&nombre=${parametrosCuerpo.nombre}`
                 apellidoConsulta = `&apellido=${parametrosCuerpo.apellido}`
                 numeroCedulaConsulta = `&numeroCedula=${parametrosCuerpo.numeroCedula}`
                 telefonoConsulta = `&telefono=${parametrosCuerpo.telefono}`
-                return res.redirect("/usuarios/crear?="+nombreError+apellidoError+nombreConsulta+apellidoConsulta+numeroCedulaConsulta+telefonoConsulta)
+                tipoConsulta = `&tipo=${parametrosCuerpo.tipo}`
+                return res.redirect("/usuarios/crear?="+nombreError+apellidoError+nombreConsulta+apellidoConsulta+numeroCedulaConsulta+telefonoConsulta+tipoConsulta)
             } else {
                 let respuestaCreacionUsuario;
                 try {
@@ -159,6 +158,7 @@ export class UsuarioController {
         // UsuarioEditadoValidado.numeroPasaporte = parametrosCuerpo.numeroPasaporte;
         // UsuarioEditadoValidado.numeroRuc = parametrosCuerpo.numeroRuc;
         UsuarioEditadoValidado.telefono = parametrosCuerpo.telefono;
+        UsuarioEditadoValidado.tipo = parametrosCuerpo.tipo;
 
         let nombreConsulta, apellidoConsulta, nombreError="", apellidoError="";
         try {
@@ -184,6 +184,7 @@ export class UsuarioController {
                     // numeroPasaporte: parametrosCuerpo.numeroPasaporte,
                     // numeroRuc: parametrosCuerpo.numeroRuc,
                     telefono: parametrosCuerpo.telefono,
+                    tipo: parametrosCuerpo.tipo,
                 } as UsuarioEntity;
                 let respuestaEdicionUsuario;
                 try{

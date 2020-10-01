@@ -30,6 +30,9 @@ export class UsuarioEntity {
     @Column()
     telefono: string;
 
+    @Column()
+    tipo: string;
+
     @OneToMany(
         type => TelefonoEntity,
         telefono => telefono.usuario

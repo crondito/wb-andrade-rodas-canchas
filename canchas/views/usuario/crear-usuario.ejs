@@ -79,6 +79,7 @@
 <% let existeNumeroPasaporte = typeof numeroPasaporte !== "undefined" %>
 <% let existeNumeroRuc = typeof numeroRuc !== "undefined" %>
 <% let existeTelefono = typeof telefono !== "undefined" %>
+<% let existeTipo = typeof tipo !== "undefined" %>
 
 <h1><%= existeUser ? "Editar" : "Crear"  %> Usuario </h1>
 
@@ -89,12 +90,14 @@
     <% // existeNumeroPasaporte = true %>
     <% // existeNumeroRuc = true %>
     <% existeTelefono = true %>
+    <% existeTipo = true %>
     <% nombre = usuario.nombre %>
     <% apellido = usuario.apellido %>
     <% numeroCedula = usuario.numeroCedula %>
     <% // numeroPasaporte = usuario.numeroPasaporte %>
     <% // numeroRuc = usuario.numeroRuc %>
     <% telefono = usuario.telefono %>
+    <% telefono = usuario.tipo %>
 <% } %>
 
 <% if(typeof error !== "undefined") {%>
@@ -125,6 +128,14 @@
 
     <label for="telefonoID">Teléfono</label>
     <input id="telefonoID" type="text" name="telefono" value="<%= existeTelefono? telefono : '' %>">
+    <br>
+
+    <label for="tipo">Tipo de usuario</label>
+    <select name="tipo" id="tipo">
+        <option value="<%= existeTipo? tipo : 'Administrador' %>">Administrador</option>
+        <option value="<%= existeTipo? tipo : 'Empleado' %>">Empleado</option>
+        <option value="<%= existeTipo? tipo : 'Cliente' %>">Cliente</option>
+    </select>
     <br>
 
     <button type="submit">SUBMIT</button>

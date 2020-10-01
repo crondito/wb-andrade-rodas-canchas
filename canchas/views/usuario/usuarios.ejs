@@ -76,6 +76,7 @@
             <th scope="col">Apellido</th>
             <th scope="col">Cédula</th>
             <th scope="col">Teléfono</th>
+            <th scope="col">Tipo</th>
             <th scope="col">Acciones</th>
         </tr>
         </thead>
@@ -88,6 +89,7 @@
                 <td><%= usuarioObjeto.apellido %></td>
                 <td><%= usuarioObjeto.numeroCedula %></td>
                 <td><%= usuarioObjeto.telefono %></td>
+                <td><%= usuarioObjeto.tipo %></td>
                 <td>
                     <a href="/usuarios/editar/<%= usuarioObjeto.id %>">
                         <button type="submit" class="btn btn-secondary">Editar</button>

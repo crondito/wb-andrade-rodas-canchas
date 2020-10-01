@@ -28,7 +28,7 @@ export class UsuarioUpdateDTO {
 
     // @IsAlpha()
     // comentario: string;
-    //
-    // @IsAlpha()
-    // tipo: string;
+
+    @IsAlpha()
+    tipo: string;
 }
