@@ -103,8 +103,8 @@ export class UsuarioController {
         usuarioValidado.nombre = parametrosCuerpo.nombre;
         usuarioValidado.apellido = parametrosCuerpo.apellido;
         usuarioValidado.numeroCedula = parametrosCuerpo.numeroCedula;
-        usuarioValidado.numeroPasaporte = parametrosCuerpo.numeroPasaporte;
-        usuarioValidado.numeroRuc = parametrosCuerpo.numeroRuc;
+        // usuarioValidado.numeroPasaporte = parametrosCuerpo.numeroPasaporte;
+        // usuarioValidado.numeroRuc = parametrosCuerpo.numeroRuc;
         usuarioValidado.telefono = parametrosCuerpo.telefono;
 
         let nombreConsulta, apellidoConsulta, nombreError="", apellidoError="";
@@ -149,8 +149,8 @@ export class UsuarioController {
         UsuarioEditadoValidado.nombre = parametrosCuerpo.nombre;
         UsuarioEditadoValidado.apellido = parametrosCuerpo.apellido;
         UsuarioEditadoValidado.numeroCedula = parametrosCuerpo.numeroCedula;
-        UsuarioEditadoValidado.numeroPasaporte = parametrosCuerpo.numeroPasaporte;
-        UsuarioEditadoValidado.numeroRuc = parametrosCuerpo.numeroRuc;
+        // UsuarioEditadoValidado.numeroPasaporte = parametrosCuerpo.numeroPasaporte;
+        // UsuarioEditadoValidado.numeroRuc = parametrosCuerpo.numeroRuc;
         UsuarioEditadoValidado.telefono = parametrosCuerpo.telefono;
 
         let nombreConsulta, apellidoConsulta, nombreError="", apellidoError="";
@@ -174,8 +174,8 @@ export class UsuarioController {
                     nombre: parametrosCuerpo.nombre,
                     apellido: parametrosCuerpo.apellido,
                     numeroCedula: parametrosCuerpo.numeroCedula,
-                    numeroPasaporte: parametrosCuerpo.numeroPasaporte,
-                    numeroRuc: parametrosCuerpo.numeroRuc,
+                    // numeroPasaporte: parametrosCuerpo.numeroPasaporte,
+                    // numeroRuc: parametrosCuerpo.numeroRuc,
                     telefono: parametrosCuerpo.telefono,
                 } as UsuarioEntity;
                 let respuestaEdicionUsuario;
@@ -215,7 +215,7 @@ export class UsuarioController {
                 "usuario/crear-usuario",
                 {
                     error: parametrosConsulta.error,
-                    rol: usuarioEncontrado,
+                    usuario: usuarioEncontrado,
                 }
             )
         }else{

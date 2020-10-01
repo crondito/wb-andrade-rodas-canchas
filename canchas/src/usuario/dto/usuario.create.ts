@@ -4,11 +4,11 @@ export class UsuarioCreateDTO {
     @IsNumberString()
     numeroCedula: string;
 
-    @IsNumberString()
-    numeroPasaporte: string;
-
-    @IsNumberString()
-    numeroRuc: string;
+    // @IsNumberString()
+    // numeroPasaporte: string;
+    //
+    // @IsNumberString()
+    // numeroRuc: string;
 
     @IsNotEmpty()
     @IsAlpha()
@@ -25,9 +25,9 @@ export class UsuarioCreateDTO {
     @IsNumberString()
     telefono: string;
 
-    @IsAlpha()
-    comentario: string;
-
-    @IsAlpha()
-    tipo: string;
+    // @IsAlpha()
+    // comentario: string;
+    //
+    // @IsAlpha()
+    // tipo: string;
 }

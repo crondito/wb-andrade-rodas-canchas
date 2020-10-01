@@ -1,14 +1,15 @@
 import {IsAlpha, IsEmpty, IsNotEmpty, IsNumberString, MaxLength, MinLength} from "class-validator";
 
 export class UsuarioUpdateDTO {
-    @IsEmpty()
+
+    @IsNumberString()
     numeroCedula: string
 
-    @IsEmpty()
-    numeroPasaporte: string
-
-    @IsEmpty()
-    numeroRuc: string
+    // @IsEmpty()
+    // numeroPasaporte: string
+    //
+    // @IsEmpty()
+    // numeroRuc: string
 
     @IsNotEmpty()
     @IsAlpha()
@@ -25,9 +26,9 @@ export class UsuarioUpdateDTO {
     @IsNumberString()
     telefono: string;
 
-    @IsAlpha()
-    comentario: string;
-
-    @IsAlpha()
-    tipo: string;
+    // @IsAlpha()
+    // comentario: string;
+    //
+    // @IsAlpha()
+    // tipo: string;
 }

@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8"/>
-    <title>Crear Usuario</title>
+    <% const existeUsuario= typeof usuario!= "undefined"%>
+    <title><%= existeUsuario ? "Editar": "Crear"%> Usuario</title>
 
     <style>
 
@@ -23,51 +24,112 @@
 }%>
 <%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 
-<form>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputEmail4">Email</label>
-            <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputPassword4">Password</label>
-            <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="inputAddress">Address</label>
-        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-    </div>
-    <div class="form-group">
-        <label for="inputAddress2">Address 2</label>
-        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputCity">City</label>
-            <input type="text" class="form-control" id="inputCity">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="inputState">State</label>
-            <select id="inputState" class="form-control">
-                <option selected>Choose...</option>
-                <option>...</option>
-            </select>
-        </div>
-        <div class="form-group col-md-2">
-            <label for="inputZip">Zip</label>
-            <input type="text" class="form-control" id="inputZip">
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck">
-            <label class="form-check-label" for="gridCheck">
-                Check me out
-            </label>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Sign in</button>
+<!--<form>-->
+<!--    <div class="form-row">-->
+<!--        <div class="form-group col-md-6">-->
+<!--            <label for="inputEmail4">Email</label>-->
+<!--            <input type="email" class="form-control" id="inputEmail4" placeholder="Email">-->
+<!--        </div>-->
+<!--        <div class="form-group col-md-6">-->
+<!--            <label for="inputPassword4">Password</label>-->
+<!--            <input type="password" class="form-control" id="inputPassword4" placeholder="Password">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--        <label for="inputAddress">Address</label>-->
+<!--        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--        <label for="inputAddress2">Address 2</label>-->
+<!--        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">-->
+<!--    </div>-->
+<!--    <div class="form-row">-->
+<!--        <div class="form-group col-md-6">-->
+<!--            <label for="inputCity">City</label>-->
+<!--            <input type="text" class="form-control" id="inputCity">-->
+<!--        </div>-->
+<!--        <div class="form-group col-md-4">-->
+<!--            <label for="inputState">State</label>-->
+<!--            <select id="inputState" class="form-control">-->
+<!--                <option selected>Choose...</option>-->
+<!--                <option>...</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <div class="form-group col-md-2">-->
+<!--            <label for="inputZip">Zip</label>-->
+<!--            <input type="text" class="form-control" id="inputZip">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--        <div class="form-check">-->
+<!--            <input class="form-check-input" type="checkbox" id="gridCheck">-->
+<!--            <label class="form-check-label" for="gridCheck">-->
+<!--                Check me out-->
+<!--            </label>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <button type="submit" class="btn btn-primary">Sign in</button>-->
+<!--</form>-->
+
+<% const existeUser = typeof usuario != "undefined" %>
+
+<% let existeNombre = typeof nombre !== "undefined" %>
+<% let existeApellido = typeof apellido !== "undefined" %>
+<% let existeNumeroCedula = typeof numeroCedula !== "undefined" %>
+<% let existeNumeroPasaporte = typeof numeroPasaporte !== "undefined" %>
+<% let existeNumeroRuc = typeof numeroRuc !== "undefined" %>
+<% let existeTelefono = typeof telefono !== "undefined" %>
+
+<h1><%= existeUser ? "Editar" : "Crear"  %> Usuario </h1>
+
+<% if(existeUser) { %>
+    <% existeNombre = true %>
+    <% existeApellido = true %>
+    <% existeNumeroCedula = true %>
+    <% // existeNumeroPasaporte = true %>
+    <% // existeNumeroRuc = true %>
+    <% existeTelefono = true %>
+    <% nombre = usuario.nombre %>
+    <% apellido = usuario.apellido %>
+    <% numeroCedula = usuario.numeroCedula %>
+    <% // numeroPasaporte = usuario.numeroPasaporte %>
+    <% // numeroRuc = usuario.numeroRuc %>
+    <% telefono = usuario.telefono %>
+<% } %>
+
+<% if(typeof error !== "undefined") {%>
+    <p>MENSAJE DE ERROR: <%= error %> </p>
+<%  } %>
+
+<form action="<%= existeUser? '/usuarios/editarDesdeVista/' + usuario.id : '/usuarios/crearDesdeVista'%>" method="POST">
+
+    <label for="nombreID">Nombre</label>
+    <input id="nombreID" type="text" name="nombre" value="<%= existeNombre? nombre : '' %>">
+    <br>
+
+    <label for="apellidoID">Apellido</label>
+    <input id="apellidoID" type="text" name="apellido" value="<%= existeApellido? apellido : '' %>">
+    <br>
+
+    <label for="cedulaID">Cédula</label>
+    <input id="cedulaID" type="text" name="numeroCedula" value="<%= existeNumeroCedula? numeroCedula : '' %>">
+    <br>
+
+<!--    <label for="pasaporteID">Pasaporte</label>-->
+<!--    <input id="pasaporteID" type="text" name="numeroPasaporte" value="<%//= existeNumeroPasaporte? numeroPasaporte : '' %>">-->
+<!--    <br>-->
+
+<!--    <label for="rucID">Ruc</label>-->
+<!--    <input id="rucID" type="text" name="numeroRuc" value="<%//= existeNumeroRuc? numeroRuc : '' %>">-->
+<!--    <br>-->
+
+    <label for="telefonoID">Teléfono</label>
+    <input id="telefonoID" type="text" name="telefono" value="<%= existeTelefono? telefono : '' %>">
+    <br>
+
+    <button type="submit">SUBMIT</button>
+    <button type="reset">RESET</button>
+
 </form>
 
 <%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>

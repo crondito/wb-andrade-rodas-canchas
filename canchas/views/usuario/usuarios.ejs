@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8"/>
-    <title>Home</title>
+    <title>Usuarios</title>
 
     <style>
 
@@ -11,6 +11,9 @@
 
 </head>
 <body>
+
+<% const existeError = typeof parametrosConsulta.error != "undefined" %>
+<% const existeMensaje = typeof parametrosConsulta.mensaje != "undefined" %>
 
 <% const activeDict={
     "inicio": false,
@@ -22,11 +25,39 @@
     "rol": false,
 }%>
 <%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
+
+<!--<div class="container">-->
+<!--    <h1>Usuarios</h1>-->
+<!--    <div class="row">-->
+        <% // const today = new Date();
+        //const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        // %>
+<!--        <div class="col-lg-1">-->
+            <% // = date %>
+<!--        </div>-->
+<!--        <div class="col-lg-2">-->
+<!--            <a href="/usuarios/crear">-->
+<!--                <button type="submit" class="btn btn-secondary">Nuevo Usuario</button>-->
+<!--            </a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
 <div class="container">
     <h1>Usuarios</h1>
+    <% if (existeError){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= parametrosConsulta.error %>
+        </div>
+    <% } %>
+    <% if(existeMensaje) { %>
+        <div class="alert alert-success" role="alert">
+            <%= parametrosConsulta.mensaje %>
+        </div>
+    <% } %>
     <div class="row">
         <% const today = new Date();
-        const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         %>
         <div class="col-lg-1">
             <%= date %>
@@ -37,6 +68,40 @@
             </a>
         </div>
     </div>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Cédula</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% let counter = 1 %>
+        <% arregloUsuarios.forEach((usuarioObjeto) => { %>
+            <tr>
+                <th scope="row"><%= counter %></th>
+                <td><%= usuarioObjeto.nombre %></td>
+                <td><%= usuarioObjeto.apellido %></td>
+                <td><%= usuarioObjeto.numeroCedula %></td>
+                <td><%= usuarioObjeto.telefono %></td>
+                <td>
+                    <a href="/usuarios/editar/<%= usuarioObjeto.id %>">
+                        <button type="submit" class="btn btn-secondary">Editar</button>
+                    </a>
+                    <form action="/usuarios/eliminarDesdeVista/<%= usuarioObjeto.id %>"
+                          method="post">
+                        <button type="submit" class="btn btn-secondary">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <% counter += 1 %>
+        <% }) %>
+        </tbody>
+    </table>
 </div>
 
 <%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>

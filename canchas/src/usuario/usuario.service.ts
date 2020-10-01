@@ -19,12 +19,12 @@ export class UsuarioService {
                 {
                     numeroCedula: Like(`%${textoDeConsulta}`)
                 },
-                {
-                    numeroPasaporte: Like(`%${textoDeConsulta}`)
-                },
-                {
-                    numeroRuc: Like(`%${textoDeConsulta}`)
-                },
+                // {
+                //     numeroPasaporte: Like(`%${textoDeConsulta}`)
+                // },
+                // {
+                //     numeroRuc: Like(`%${textoDeConsulta}`)
+                // },
                 {
                     nombre: Like(`%${textoDeConsulta}`)
                 },

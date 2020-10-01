@@ -8,6 +8,7 @@ import {RolEntity} from "../rol/rol.entity";
 @Unique(["numeroPasaporte"])
 @Unique(["numeroRuc"])
 export class UsuarioEntity {
+
     @PrimaryGeneratedColumn()
     id: number;
 
