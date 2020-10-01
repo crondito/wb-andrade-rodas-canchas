@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8"/>
-    <title>Crear Reservación</title>
+    <% const existeReservacion = typeof reservacion != "undefined" %>
+    <title><%= existeReservacion ? "Editar" : "Crear" %> Reservacion</title>
 
     <style>
 
@@ -11,6 +12,38 @@
 
 </head>
 <body>
+
+<!--Banderas para comprobar variables usadas luego-->
+
+<% let existeError = typeof error != "undefined" %>
+<% let existefechaHoraReservacionError = typeof fechaHoraReservacionError != "undefined" %>
+<% let existeTiempoReservacionError = typeof tiempoReservacionError != "undefined" %>
+<% let existeEstadoError = typeof estadoError != "undefined" %>
+<% let existeUsuarioError = typeof usuarioError != "undefined" %>
+<% let existeCantidadError = typeof cantidadError != "undefined" %>
+
+<% let existefechaHoraReservacion = typeof fechaHoraReservacion != "undefined" %>
+<% let existeTiempoReservacion = typeof tiempoReservacion != "undefined" %>
+<% let existeEstado = typeof estado != "undefined" %>
+<% let existeUsuario = typeof usuario != "undefined" %>
+<% let existeCantidad = typeof cantidad != "undefined" %>
+<% let existeCancha= typeof cancha != "undefined" %>
+<% let existeEquipo= typeof equipo != "undefined" %>
+
+<% if(existeReservacion){ %>
+
+    <% existeNombre = true %>
+    <% existeComentario = true %>
+    <% existeTipo = true %>
+    <% existeEstado = true %>
+
+    <!--Se prefiere lo recibido por un error en consulta, si no existe se llena desde la BD-->
+    <% nombre = cancha.nombre %>
+    <% comentario = cancha.comentario %>
+    <% tipo = cancha.tipo %>
+    <% estado = cancha.estado %>
+
+<% } %>
 
 <% const activeDict={
     "inicio": false,

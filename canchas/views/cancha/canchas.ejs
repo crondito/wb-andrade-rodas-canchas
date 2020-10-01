@@ -38,11 +38,12 @@
         </div>
     <%}%>
     <div class="row">
+        <% const days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];%>
         <% const today = new Date();
         const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         %>
         <div class="col-lg-1">
-            <%= date %>
+            <%= days[today.getDay()] +", "+date %>
         </div>
         <div class="col-lg-2">
             <a href="/canchas/crear">

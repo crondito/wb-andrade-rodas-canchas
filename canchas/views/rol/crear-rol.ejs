@@ -22,12 +22,12 @@
 <% let existeDescripcion= typeof descripcion!= "undefined"%>
 
 <% if(existeRol){ %>
-    <!--Se prefiere lo recibido por un error en consulta, si no existe se llena desde la BD-->
-    <% if(!existeNombre){nombre=rol.nombre}%>
-    <% if(!existeDescripcion){descripcion=rol.descripcion}%>
 
     <% existeNombre = true%>
     <% existeDescripcion = true%>
+
+    <% nombre=rol.nombre%>
+    <% descripcion=rol.descripcion%>
 
 <%}%>
 

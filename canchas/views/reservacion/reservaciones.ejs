@@ -12,6 +12,9 @@
 </head>
 <body>
 
+<% const existeError= typeof parametrosConsulta.error!= "undefined"%>
+<% const existeMensaje= typeof parametrosConsulta.mensaje!= "undefined"%>
+
 <% const activeDict={
     "inicio": false,
     "reservacion":true,
@@ -25,18 +28,18 @@
 <div class="container">
     <h1>Reservaciones</h1>
     <div class="row">
+        <% const days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];%>
         <% const today = new Date();
         const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         %>
         <div class="col-lg-1">
-            <%= date %>
+            <%= days[today.getDay()] +", "+date %>
         </div>
         <div class="col-lg-2">
             <a href="/reservaciones/crear">
                 <button type="submit" class="btn btn-secondary">Nueva Reservación</button>
             </a>
         </div>
-
     </div>
 </div>
 

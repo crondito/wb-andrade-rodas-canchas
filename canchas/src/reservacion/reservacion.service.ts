@@ -10,8 +10,8 @@ export class ReservacionService {
         private repositorio: Repository<ReservacionEntity>
     ){
     }
-    crearUno(nuevoReservacion: ReservacionEntity){
-        return this.repositorio.save(nuevoReservacion) //Promesa
+    crearUno(nuevaReservacion: ReservacionEntity){
+        return this.repositorio.save(nuevaReservacion) //Promesa
     }
     buscarTodos(textoDeConsulta?: string){
         const consulta: FindManyOptions<ReservacionEntity> = {
