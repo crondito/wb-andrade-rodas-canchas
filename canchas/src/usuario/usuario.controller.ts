@@ -1,12 +1,62 @@
-import {Controller, Get, Res} from "@nestjs/common";
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Get,
+    InternalServerErrorException,
+    NotFoundException, Param,
+    Post,
+    Query,
+    Res
+} from "@nestjs/common";
+import {UsuarioCreateDTO} from "./dto/usuario.create";
+import {validate, ValidationError} from "class-validator";
+import {UsuarioService} from "./usuario.service";
+import {UsuarioEntity} from "./usuario.entity";
+import {UsuarioUpdateDTO} from "./dto/usuario.update";
 
 @Controller("usuarios")
 export class UsuarioController {
+
+    constructor(
+        private readonly _usuarioService: UsuarioService
+    ) {
+    }
+
+    // @Get()
+    // vistaHome(
+    //     @Res() res
+    // ){
+    //     res.render("usuario/usuarios")
+    // }
+
     @Get()
-    vistaHome(
+    async vistaUsuario(
+        @Query() parametrosConsulta,
         @Res() res
     ){
-        res.render("usuario/usuarios")
+        let resultadoEncontrado
+        let busqueda = ""
+        const existeBusqueda = typeof parametrosConsulta.busqueda!="undefined";
+        if (existeBusqueda){
+            busqueda = parametrosConsulta.busqueda
+        }
+        try{
+            resultadoEncontrado = await this._usuarioService.buscarTodos(busqueda)
+        } catch{
+            throw new InternalServerErrorException("Error encontrando usuarios")
+        }
+        if(resultadoEncontrado){
+            res.render(
+                "usuario/usuarios",
+                {
+                    arregloUsuarios: resultadoEncontrado,
+                    parametrosConsulta: parametrosConsulta
+                }
+            )
+        }else{
+            throw new NotFoundException("No se encontraron usuarios")
+        }
     }
 
     @Get("clientes")
@@ -16,17 +66,182 @@ export class UsuarioController {
         res.render("usuario/clientes")
     }
 
+    // @Get("crear")
+    // vistaCrear(
+    //     @Res() res
+    // ){
+    //     res.render("usuario/crear-usuario")
+    // }
+
     @Get("crear")
     vistaCrear(
+        @Query() parametrosConsulta,
         @Res() res
     ){
-        res.render("usuario/crear-usuario")
+        res.render(
+            "usuario/crear-usuario",
+            {
+                error: parametrosConsulta.error,
+                nombreError: parametrosConsulta.nombreError,
+                descripcionError: parametrosConsulta.descripcionError,
+                nombre: parametrosConsulta.nombre,
+                apellido: parametrosConsulta.apellido,
+                numeroCedula: parametrosConsulta.numeroCedula,
+                numeroPasaporte: parametrosConsulta.numeroPasaporte,
+                numeroRuc: parametrosConsulta.numeroRuc,
+                telefono: parametrosConsulta.telefono,
+            }
+        )
     }
 
-    @Get("crear/cliente")
-    vistaCrearCliente(
+    @Post("crearDesdeVista")
+    async crearDesdeVista(
+        @Body() parametrosCuerpo,
         @Res() res
     ){
-        res.render("usuario/crear-cliente")
+        const usuarioValidado = new UsuarioCreateDTO();
+        usuarioValidado.nombre = parametrosCuerpo.nombre;
+        usuarioValidado.apellido = parametrosCuerpo.apellido;
+        usuarioValidado.numeroCedula = parametrosCuerpo.numeroCedula;
+        usuarioValidado.numeroPasaporte = parametrosCuerpo.numeroPasaporte;
+        usuarioValidado.numeroRuc = parametrosCuerpo.numeroRuc;
+        usuarioValidado.telefono = parametrosCuerpo.telefono;
+
+        let nombreConsulta, apellidoConsulta, nombreError="", apellidoError="";
+        try {
+            const errores: ValidationError[] = await validate(usuarioValidado);
+            if(errores.length > 0){
+                console.log("Errores", errores);
+                for(const error of errores){
+                    if(error["property"]=="nombre"){
+                        nombreError = "nombreError=Error en nombre de Usuario"
+                    }else if(error["property"]=="apellido"){
+                        apellidoError = "&apellidoError=Error en apellido de Usuario"
+                    }
+                }
+                nombreConsulta = `&nombre=${parametrosCuerpo.nombre}`
+                apellidoConsulta = `&apellido=${parametrosCuerpo.apellido}`
+                return res.redirect("/usuarios/crear?="+nombreError+apellidoError+nombreConsulta+apellidoConsulta)
+            } else {
+                let respuestaCreacionUsuario;
+                try {
+                    respuestaCreacionUsuario = this._usuarioService
+                        .crearUno(parametrosCuerpo)
+                } catch (error){
+                    const mensajeError = "Error creando Usuario"
+                    return res.redirect("/usuarios/crear?error="+mensajeError)
+                }
+                return res.redirect("/usuarios")
+            }
+        } catch (e) {
+            console.error("Error", e);
+            throw new BadRequestException("Error validando")
+        }
     }
+
+    @Post("editarDesdeVista/:id")
+    async editarDesdeVista(
+        @Param() parametrosRuta,
+        @Body() parametrosCuerpo,
+        @Res() res
+    ){
+        const UsuarioEditadoValidado = new UsuarioUpdateDTO();
+        UsuarioEditadoValidado.nombre = parametrosCuerpo.nombre;
+        UsuarioEditadoValidado.apellido = parametrosCuerpo.apellido;
+        UsuarioEditadoValidado.numeroCedula = parametrosCuerpo.numeroCedula;
+        UsuarioEditadoValidado.numeroPasaporte = parametrosCuerpo.numeroPasaporte;
+        UsuarioEditadoValidado.numeroRuc = parametrosCuerpo.numeroRuc;
+        UsuarioEditadoValidado.telefono = parametrosCuerpo.telefono;
+
+        let nombreConsulta, apellidoConsulta, nombreError="", apellidoError="";
+        try {
+            const errores: ValidationError[] = await validate(UsuarioEditadoValidado)
+            if(errores.length > 0) {
+                console.log("Errores", errores);
+                for (const error of errores) {
+                    if (error["property"] == "nombre") {
+                        nombreError = "nombreError=Error en nombre"
+                    } else if (error["property"] == "apellido") {
+                        apellidoError = "&apellidoError=Error en descripción"
+                    }
+                }
+                nombreConsulta = `&nombre=${parametrosCuerpo.nombre}`
+                apellidoConsulta = `&apellido=${parametrosCuerpo.apellido}`
+                return res.redirect("/usuarios/editar/" + parametrosRuta.id + "?=" + nombreError + apellidoError + nombreConsulta + apellidoConsulta)
+            } else {
+                const usuarioEditado = {
+                    id: Number(parametrosRuta.id),
+                    nombre: parametrosCuerpo.nombre,
+                    apellido: parametrosCuerpo.apellido,
+                    numeroCedula: parametrosCuerpo.numeroCedula,
+                    numeroPasaporte: parametrosCuerpo.numeroPasaporte,
+                    numeroRuc: parametrosCuerpo.numeroRuc,
+                    telefono: parametrosCuerpo.telefono,
+                } as UsuarioEntity;
+                let respuestaEdicionUsuario;
+                try{
+                    respuestaEdicionUsuario = await this._usuarioService
+                        .editarUno(usuarioEditado)
+                    return res.redirect("/usuarios?mensaje=Usuario editado");
+                } catch (error){
+                    console.log(error);
+                    return res.redirect("/usuarios?error=Error editando usuario")
+                }
+                return res.redirect("/usuarios")
+            }
+        }catch (e) {
+            console.error("Error",e);
+            throw new BadRequestException("Error validando")
+        }
+
+    }
+
+    @Get("editar/:id")
+    async vistaEditar(
+        @Query() parametrosConsulta,
+        @Param() parametrosRuta,
+        @Res() res
+    ){
+        const id = Number(parametrosRuta.id)
+        let usuarioEncontrado
+        try{
+            usuarioEncontrado = await this._usuarioService.buscarUno(id);
+        }catch (error) {
+            console.error("Error del servidor"+error)
+            return res.redirect("/usuarios?error=Error buscando Usuario")
+        }
+        if(usuarioEncontrado){
+            return res.render(
+                "usuario/crear-usuario",
+                {
+                    error: parametrosConsulta.error,
+                    rol: usuarioEncontrado,
+                }
+            )
+        }else{
+            return res.redirect("/usuarios?error=Usuario no encontrado")
+        }
+    }
+
+    @Post("eliminarDesdeVista/:id")
+    async eliminarDesdeVista(
+        @Param() parametrosRuta,
+        @Res() res
+    ){
+        try{
+            const id = Number(parametrosRuta.id);
+            await this._usuarioService.eliminarUno(id);
+            return res.redirect("/usuarios?mensaje=Usuario eliminado")
+        } catch (error){
+            console.log(error);
+            return res.redirect("/usuarios?error=Error eliminando Usuario")
+        }
+    }
+    
+    // @Get("crear/cliente")
+    // vistaCrearCliente(
+    //     @Res() res
+    // ){
+    //     res.render("usuario/crear-cliente")
+    // }
 }

@@ -22,6 +22,9 @@ export class UsuarioUpdateDTO {
     @MaxLength(60)
     apellido: string;
 
+    @IsNumberString()
+    telefono: string;
+
     @IsAlpha()
     comentario: string;
 

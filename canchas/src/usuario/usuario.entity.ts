@@ -26,6 +26,9 @@ export class UsuarioEntity {
     @Column()
     apellido: string;
 
+    @Column()
+    telefono: string;
+
     @OneToMany(
         type => TelefonoEntity,
         telefono => telefono.usuario

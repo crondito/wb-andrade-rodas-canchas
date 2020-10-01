@@ -30,6 +30,9 @@ export class UsuarioService {
                 },
                 {
                     apellido: Like(`%${textoDeConsulta}`)
+                },
+                {
+                    telefono: Like(`%${textoDeConsulta}`)
                 }
             ]
         }

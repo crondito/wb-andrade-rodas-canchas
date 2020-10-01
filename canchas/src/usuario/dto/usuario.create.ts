@@ -2,13 +2,13 @@ import {IsAlpha, IsDecimal, IsNotEmpty, IsNumber, IsNumberString, MaxLength, Min
 
 export class UsuarioCreateDTO {
     @IsNumberString()
-    numeroCedula: string
+    numeroCedula: string;
 
     @IsNumberString()
-    numeroPasaporte: string
+    numeroPasaporte: string;
 
     @IsNumberString()
-    numeroRuc: string
+    numeroRuc: string;
 
     @IsNotEmpty()
     @IsAlpha()
@@ -21,6 +21,9 @@ export class UsuarioCreateDTO {
     @MinLength(3)
     @MaxLength(60)
     apellido: string;
+
+    @IsNumberString()
+    telefono: string;
 
     @IsAlpha()
     comentario: string;
