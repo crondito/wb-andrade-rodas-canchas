@@ -17,6 +17,9 @@ import {EquipoService} from "./equipo.service";
     ],
     providers: [
         EquipoService
+    ],
+    exports: [
+        EquipoService
     ]
 }) export class EquipoModule {
 

@@ -27,6 +27,16 @@
 <%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 <div class="container">
     <h1>Reservaciones</h1>
+    <% if (existeError){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= parametrosConsulta.error%>
+        </div>
+    <% } %>
+    <% if(existeMensaje) { %>
+        <div class="alert alert-success" role="alert">
+            <%= parametrosConsulta.mensaje%>
+        </div>
+    <%}%>
     <div class="row">
         <% const days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];%>
         <% const today = new Date();
