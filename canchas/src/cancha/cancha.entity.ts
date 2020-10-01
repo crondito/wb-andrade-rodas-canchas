@@ -1,7 +1,8 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {ReservacionEntity} from "../reservacion/reservacion.entity";
 
 @Entity("cancha")
+@Unique(["nombre"])
 export class CanchaEntity{
     @PrimaryGeneratedColumn()
     id: number;
