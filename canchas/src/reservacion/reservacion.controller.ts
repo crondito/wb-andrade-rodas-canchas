@@ -94,7 +94,8 @@ export class ReservacionController {
             busqueda = parametrosConsulta.busqueda
         }
         try {
-            canchasEncontradas = await this._canchaService.buscarTodos(busqueda)
+            canchasEncontradas = await this._canchaService.buscarCanchasDisponibles()
+            canchasEncontradas = canchasEncontradas[0]
             equiposEncontrados = await this._equipoService.buscarTodos(busqueda)
         } catch {
             res.render(
@@ -218,7 +219,7 @@ export class ReservacionController {
                     }
                 }
                 for (const error of erroresReservaEquipo) {
-                    cantidadEquipoError = "&cantidadEquipoError= Error en cantidad de Equipos" + error.toString()
+                    cantidadEquipoError = "&cantidadEquipoError= Error en cantidad de Equipos"
                 }
                 fechaHoraReservacionConsulta = `&fechaHoraReservacion=${parametrosCuerpo.fechaHoraReservacion}`
                 estadoConsulta = `&estado=${parametrosCuerpo.estado}`

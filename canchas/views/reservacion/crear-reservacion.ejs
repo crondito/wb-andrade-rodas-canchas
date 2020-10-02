@@ -60,11 +60,16 @@
 <% let minutes= ""%>
 <% console.log(fechaHoraReservacion+""+existeFechaHoraReservacion)%>
 <% if(existeFechaHoraReservacion){%>
+    <%try{%>
     <% fechaFormateada = fechaHoraReservacion.getFullYear()+'-'+(fechaHoraReservacion.getMonth()+1)+'-'+fechaHoraReservacion.getDate();%>
     <% hours= fechaHoraReservacion.getHours();%>
     <% minutes= fechaHoraReservacion.getMinutes();%>
     <% if(hours === 0){hours="00"} %>
     <% if(minutes === 0){minutes="00"} %>
+    <%} catch (e) {
+        console.log("Error:"+e)
+    }%>
+
 <% } %>
 
 <% const existeCurrentUserRol= typeof currentUserRol!= "undefined"%>

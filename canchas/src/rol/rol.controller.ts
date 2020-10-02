@@ -31,6 +31,9 @@ export class RolController{
         if(!estaLogueado){
             return res.redirect('login');
         }
+        if(currentUserRol.toString() != "Administrador"){
+            return res.redirect('home');
+        }
         let resultadoEncontrado
         let busqueda = ""
         const existeBusqueda = typeof parametrosConsulta.busqueda!="undefined";
@@ -66,6 +69,9 @@ export class RolController{
         const currentUserRol = session.rol;
         if(!estaLogueado){
             return res.redirect('login');
+        }
+        if(currentUserRol.toString() != "Administrador"){
+            return res.redirect('home');
         }
         res.render(
             "rol/crear-rol",
@@ -181,6 +187,9 @@ export class RolController{
         const currentUserRol = session.rol;
         if(!estaLogueado){
             return res.redirect('login');
+        }
+        if(currentUserRol.toString() != "Administrador"){
+            return res.redirect('home');
         }
         const id = Number(parametrosRuta.id)
         let rolEncontrado

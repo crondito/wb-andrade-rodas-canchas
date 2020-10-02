@@ -32,6 +32,9 @@ export class EquipoController {
         if(!estaLogueado){
             return res.redirect('login');
         }
+        if(currentUserRol.toString() != "Administrador" && currentUserRol.toString() != "Empleado"){
+            return res.redirect('home');
+        }
         let resultadoEncontrado
         let busqueda = ""
         const existeBusqueda = typeof parametrosConsulta.busqueda!="undefined"
@@ -68,6 +71,9 @@ export class EquipoController {
         if(!estaLogueado){
             return res.redirect('login');
         }
+        if(currentUserRol.toString() != "Administrador" && currentUserRol.toString() != "Empleado"){
+            return res.redirect('home');
+        }
         res.render(
             "equipo/crear-equipo",
             {
@@ -97,14 +103,14 @@ export class EquipoController {
                 console.log("Errores",errores);
                 for(const error of errores){
                     if (error["property"]=="nombre"){
-                        nombreError = "nombreError=Error en nombre de rol"
+                        nombreError = "&nombreError=Error en nombre de rol"
                     } else if (error["property"]=="descripcion"){
                         descripcionError = "&descripcionError=Error en descripcion de rol"
                     }
                 }
                 nombreConsulta = `&nombre=${parametrosCuerpo.nombre}`
                 descripcionConsulta = `&descripcion=${parametrosCuerpo.descripcion}`
-                return res.redirect("/equipos/crear?="+nombreError+descripcionError+nombreConsulta+descripcionConsulta)
+                return res.redirect("/equipos/crear?"+nombreError+descripcionError+nombreConsulta+descripcionConsulta)
             }else {
                 let respuestaCreacionEquipo;
                 try{
@@ -139,14 +145,18 @@ export class EquipoController {
                 console.log("Errores",errores);
                 for(const error of errores){
                     if(error["property"]=="nombre"){
-                        nombreError = "nombreError=Error en nombre de equipo"
+                        nombreError = "&nombreError=Error en nombre de equipo"
                     } else if (error["property"]=="descripcion"){
                         descripcionError = "&descripcionError=Error en descripcion de equipo"
                     }
                 }
                 nombreConsulta = `&nombre=${parametrosCuerpo.nombre}`
                 descripcionConsulta = `&descripcion=${parametrosCuerpo.descripcion}`
-                return res.redirect("/equipos/editar/"+parametrosRuta.id+"?="+nombreError+descripcionError+nombreConsulta+descripcionConsulta)
+                return res.redirect("/equipos/editar/"+parametrosRuta.id+"?"
+                    +nombreError
+                    +descripcionError
+                    +nombreConsulta
+                    +descripcionConsulta)
             } else {
                 const equipoEditado = {
                     id: Number(parametrosRuta.id),
@@ -182,6 +192,9 @@ export class EquipoController {
         if(!estaLogueado){
             return res.redirect('login');
         }
+        if(currentUserRol.toString() != "Administrador" && currentUserRol.toString() != "Empleado"){
+            return res.redirect('home');
+        }
         const id = Number(parametrosRuta.id)
         let equipoEncontrado
         try {
@@ -196,6 +209,10 @@ export class EquipoController {
                 {
                     error: parametrosConsulta.error,
                     equipo: equipoEncontrado,
+                    nombreError: parametrosConsulta.nombreError,
+                    descripcionError: parametrosConsulta.descripcionError,
+                    nombre: parametrosConsulta.nombre,
+                    descripcion: parametrosConsulta.descripcion,
                     currentUserRol: currentUserRol
                 }
             )

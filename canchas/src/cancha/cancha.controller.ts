@@ -32,6 +32,9 @@ export class CanchaController {
         if(!estaLogueado){
             return res.redirect('login');
         }
+        if(currentUserRol.toString() != "Administrador" && currentUserRol.toString() != "Empleado"){
+            return res.redirect('home');
+        }
         let resultadoEncontrado
         let busqueda = ""
         const existeBusqueda = typeof parametrosConsulta.busqueda!="undefined";
@@ -67,6 +70,9 @@ export class CanchaController {
         const currentUserRol = session.rol;
         if(!estaLogueado){
             return res.redirect('login');
+        }
+        if(currentUserRol.toString() != "Administrador" && currentUserRol.toString() != "Empleado"){
+            return res.redirect('home');
         }
         res.render(
             "cancha/crear-cancha",
@@ -236,6 +242,9 @@ export class CanchaController {
         const currentUserRol = session.rol;
         if(!estaLogueado){
             return res.redirect('login');
+        }
+        if(currentUserRol.toString() != "Administrador" && currentUserRol.toString() != "Empleado"){
+            return res.redirect('home');
         }
         const id = Number(parametrosRuta.id)
         let canchaEncontrado
