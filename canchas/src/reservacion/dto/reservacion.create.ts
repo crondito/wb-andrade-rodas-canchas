@@ -4,12 +4,7 @@ export class ReservacionCreateDTO {
     @IsNotEmpty()
     @IsDate()
     @MinDate(todayDate)
-    fechaRegistro: Date;
-
-    @IsNotEmpty()
-    @IsDate()
-    @MinDate(todayDate)
-    fechaHoraReserva: Date;
+    fechaHoraReservacion: Date;
 
     @IsNotEmpty()
     @IsAlpha()

@@ -166,7 +166,7 @@ export class CanchaController {
                     }else if(error["property"]=="comentario"){
                         comentarioError = "&comentarioError=Error en comentario de cancha"
                     }else if(error["property"]=="tipo"){
-                        tipoError = "&tipoError=Error en tipo de cancha"
+                        tipoError = "&tipoError=Error en ciontipo de cancha"
                     }else if(error["property"]=="estado"){
                         estadoError = "&estadoError=Error en estado de cancha"
                     }

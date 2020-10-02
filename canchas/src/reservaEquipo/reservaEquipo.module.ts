@@ -1,6 +1,7 @@
 import {Module} from "@nestjs/common";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ReservaEquipoEntity} from "./reservaEquipo.entity";
+import {ReservaEquipoService} from "./reservaEquipo.service";
 
 @Module({
     controllers: [],
@@ -13,7 +14,8 @@ import {ReservaEquipoEntity} from "./reservaEquipo.entity";
                 "default"
             )
     ],
-    providers: []
+    providers: [ReservaEquipoService],
+    exports: [ReservaEquipoService]
 }) export class ReservaEquipoModule {
 
 }

@@ -17,17 +17,21 @@ export class ReservacionService {
         const consulta: FindManyOptions<ReservacionEntity> = {
             where: [
                 {
-                    nombre: Like(`%${textoDeConsulta}`)
+                    fechaRegistro: Like(`%${textoDeConsulta}`)
                 },
                 {
-                    descripcion: Like(`%${textoDeConsulta}`)
+                    fechaHoraReservacion: Like(`%${textoDeConsulta}`)
+                },
+                {
+                    estado: Like(`%${textoDeConsulta}`)
                 }
-            ]
+            ],
+            relations:["cancha"]
         }
         return this.repositorio.find(consulta) //Promesa
     }
     buscarUno(id: number){
-        return this.repositorio.findOne(id) //Promesa
+        return this.repositorio.findOne(id,{relations:["cancha","usuario","reservacionEquipos"]}) //Promesa
     }
     editarUno(reservacionEditada: ReservacionEntity){
         return this.repositorio.save(reservacionEditada);

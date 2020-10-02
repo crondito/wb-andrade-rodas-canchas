@@ -48,12 +48,10 @@
 
     <% fechaHoraReservacion = reservacion.fechaHoraReservacion %>
     <% tiempoReservacion = reservacion.tiempoReservacion %>
-    <% usuario = reservacion.usuario %>
+    <% usuario = reservacion.usuario.numeroCedula %>
     <% estado = reservacion.estado %>
-    <% cantidadEquipo = reservacion.cantidadEquipo %>
     <% estado = reservacion.estado %>
-    <% cancha = reservacion.cancha %>
-    <% equipo = reservacion.equipo%>
+    <% cancha = reservacion.cancha.nombre %>
 
 <% } %>
 
@@ -85,8 +83,8 @@
                         type="text"
                         class="form-control <%= existeUsuarioError ? "is-invalid" : "" %>"
                         id="inputCedula"
-                        name="cedula"
-                        value="<%= existeUsuario ? usuario.numeroCedula : "" %>"
+                        name="usuario"
+                        value="<%= existeUsuario ? usuario : "" %>"
                         placeholder="Ingrese el nombre del rol, por ejemplo usuario">
                 <div class="invalid-feedback">
                     <%= existeUsuarioError ? usuarioError : "" %>
@@ -105,6 +103,11 @@
                 </select>
             </div>
         </div>
+        <%const fechaFormateada = fechaHoraReservacion.getFullYear()+'-'+(fechaHoraReservacion.getMonth()+1)+'-'+fechaHoraReservacion.getDate();%>
+        <%let hours= fechaHoraReservacion.getHours();%>
+        <%let minutes= fechaHoraReservacion.getMinutes();%>
+        <% if(hours == 0){hours="00"} %>
+        <% if(minutes == 0){minutes="00"} %>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputFecha">Fecha de reservación</label>
@@ -113,7 +116,7 @@
                         class="form-control"
                         id="inputCanchaTipo"
                         name="fechaHoraReservacion"
-                        value="<%= existeFechaHoraReservacion ? fechaHoraReservacion : "" %>">
+                        value="<%= existeFechaHoraReservacion ? fechaFormateada : "" %>">
                 <div class="invalid-feedback">
                     <%= existeFechaHoraReservacionError ? fechaHoraReservacionError : "" %>
                 </div>
@@ -125,7 +128,7 @@
                         class="form-control"
                         id="inputCanchaTipo"
                         name="horaReservacion"
-                        value="<%= existeHoraReservacion ? horaReservacion : "" %>">
+                        value="<%= existeHoraReservacion ? hours+":"+minutes : "" %>">
                 <div class="invalid-feedback">
                     <%= existeHoraReservacionError ? horaReservacionError : "" %>
                 </div>
@@ -138,6 +141,7 @@
                         id="inputCancha"
                         class="form-control"
                         name="equipo">
+                    <% console.log(equipo)%>
                     <option selected><%= existeEquipo ? equipo : "Seleccione..." %></option>
                     <% equiposArray.forEach((equipoObjeto) => { %>
                         <option><%= equipoObjeto.nombre%></option>
@@ -145,12 +149,13 @@
                 </select>
             </div>
             <div class="form-group col-md-6">
-                <label for="inputHora">Cantidad</label>
+                <label for="inputCantidad">Cantidad</label>
                 <input
                         type="text"
-                        class="form-control <%= existeCantidadEquipoError ? "is-invalid" : "" %>""
-                        id="inputCanchaTipo"
-                        name="horaReservacion"
+                        class="form-control <%= existeCantidadEquipoError ? "is-invalid" : "" %>"
+                        id="inputCantidad"
+                        name="cantidadEquipo"
+                        <% console.log(cantidadEquipo)%>
                         value="<%= existeCantidadEquipo ? cantidadEquipo : "" %>">
                 <div class="invalid-feedback">
                     <%= existeCantidadEquipoError ? cantidadEquipoError : "" %>
@@ -159,17 +164,31 @@
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="inputReservacion">Tiempo de reservación (horas)</label>
+                <label for="inputTiempoReservacion">Tiempo de reservación (horas)</label>
                 <input
                         type="text"
-                        class="form-control <%= existeTiempoReservacionError ? "is-invalid" : "" %>""
+                        class="form-control <%= existeTiempoReservacionError ? "is-invalid" : "" %>"
                 id="inputCanchaTipo"
-                name="horaReservacion"
+                name="tiempoReservacion"
                 value="<%= existeTiempoReservacion ? tiempoReservacion : "" %>">
                 <div class="invalid-feedback">
                     <%= existeTiempoReservacionError ? tiempoReservacionError : "" %>
                 </div>
             </div>
+            <% if(existeReservacion){ %>
+            <div class="form-group col-md-6">
+                <label for="inputEstado">Estado</label>
+                <select
+                        id="inputEstado"
+                        class="form-control"
+                        name="estado">
+                    <option selected><%= existeEstado ? estado : "Seleccione..."%></option>
+                    <option>Cancelada</option>
+                    <option>En proceso</option>
+                    <option>Programada</option>
+                </select>
+            </div>
+            <% } %>
         </div>
         <button type="submit" class="btn btn-secondary"><%= existeReservacion ? "Guardar": "Crear"%></button>
         <button type="reset" class="btn btn-light">Limpiar</button>
