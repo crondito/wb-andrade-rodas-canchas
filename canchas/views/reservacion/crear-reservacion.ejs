@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <% const existeReservacion = typeof reservacion != "undefined" %>
+    <title><%= existeReservacion ? "Editar" : "Crear" %> Reservacion</title>
+
+    <style>
+
+    </style>
+    <%- include("../compartido/estilos-generales/estilos-generales-component.ejs") %>
+
+</head>
+<body>
+
+<!--Banderas para comprobar variables usadas luego-->
+
+<% let existeError = typeof error != "undefined" %>
+<% let existeFechaHoraReservacionError = typeof fechaHoraReservacionError != "undefined" %>
+<% let existeHoraReservacionError = typeof horaReservacionError != "undefined" %>
+<% let existeTiempoReservacionError = typeof tiempoReservacionError != "undefined" %>
+<% let existeEstadoError = typeof estadoError != "undefined" %>
+<% let existeUsuarioError = typeof usuarioError != "undefined" %>
+<% let existeCantidadEquipoError = typeof cantidadEquipoError != "undefined" %>
+
+<% let existeFechaHoraReservacion = typeof fechaHoraReservacion != "undefined" %>
+<% let existeHoraReservacion = typeof horaReservacion != "undefined" %>
+<% let existeTiempoReservacion = typeof tiempoReservacion != "undefined" %>
+<% let existeEstado = typeof estado != "undefined" %>
+<% let existeUsuario = typeof usuario != "undefined" %>
+<% let existeCantidadEquipo = typeof cantidadEquipo != "undefined" %>
+<% let existeCancha= typeof cancha != "undefined" %>
+<% let existeEquipo= typeof equipo != "undefined" %>
+<% let existeCanchasArray= typeof canchasArray != "undefined" %>
+<% let existeEquiposArray= typeof equiposArray != "undefined" %>
+
+<% if(existeReservacion){ %>
+
+    <% existeFechaHoraReservacion = true %>
+    <% existeHoraReservacion = true %>
+    <% existeTiempoReservacion = true %>
+    <% existeUsuario = true %>
+    <% existeEstado = true %>
+    <% existeCantidadEquipo = true %>
+    <% existeEstado = true %>
+    <% existeCancha = true %>
+    <% existeEquipo = true %>
+
+    <% fechaHoraReservacion = reservacion.fechaHoraReservacion %>
+    <% tiempoReservacion = reservacion.tiempoReservacion %>
+    <% usuario = reservacion.usuario.numeroCedula %>
+    <% estado = reservacion.estado %>
+    <% estado = reservacion.estado %>
+    <% cancha = reservacion.cancha.nombre %>
+
+<% } %>
+
+<% let fechaFormateada = ""%>
+<% let hours= ""%>
+<% let minutes= ""%>
+<% console.log(fechaHoraReservacion+""+existeFechaHoraReservacion)%>
+<% if(existeFechaHoraReservacion){%>
+    <% fechaFormateada = fechaHoraReservacion.getFullYear()+'-'+(fechaHoraReservacion.getMonth()+1)+'-'+fechaHoraReservacion.getDate();%>
+    <% hours= fechaHoraReservacion.getHours();%>
+    <% minutes= fechaHoraReservacion.getMinutes();%>
+    <% if(hours === 0){hours="00"} %>
+    <% if(minutes === 0){minutes="00"} %>
+<% } %>
+
+<% const existeCurrentUserRol= typeof currentUserRol!= "undefined"%>
+
+<% if(!existeCurrentUserRol){currentUserRol="Cliente"} %>
+
+<% const activeDict={
+    "inicio": false,
+    "reservacion":true,
+    "cliente": false,
+    "usuario": false,
+    "cancha": false,
+    "equipo": false,
+    "rol": false,
+    "currentUserRol": currentUserRol
+}%>
+<%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
+
+<div class="container">
+    <!--Definir si es la vista editar o crear-->
+    <h1> <%= existeReservacion ? "Editar" : "Crear" %> Reservación</h1>
+    <% if (existeError){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+    <% } %>
+    <form action=" <%= existeReservacion ? "/reservaciones/editarDesdeVista/" + reservacion.id : "/reservaciones/crearDesdeVista/" %>"
+          method="post">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCedula">CI de Cliente</label>
+                <input
+                        type="text"
+                        class="form-control <%= existeUsuarioError ? "is-invalid" : "" %>"
+                        id="inputCedula"
+                        name="usuario"
+                        value="<%= existeUsuario ? usuario : "" %>"
+                        placeholder="Ingrese el nombre del rol, por ejemplo usuario"
+                        <%= existeReservacion? "readonly":"" %>>
+                <div class="invalid-feedback">
+                    <%= existeUsuarioError ? usuarioError : "" %>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputCancha">Cancha</label>
+                <select
+                        id="inputCancha"
+                        class="form-control"
+                        name="cancha">
+                    <option selected><%= existeCancha ? cancha : "Seleccione..." %></option>
+                    <% canchasArray.forEach((canchaObjeto) => { %>
+                    <option><%= canchaObjeto.nombre%></option>
+                    <%})%>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputFecha">Fecha de reservación</label>
+                <input
+                        type="date"
+                        class="form-control"
+                        id="inputCanchaTipo"
+                        name="fechaHoraReservacion"
+                        value="<%= existeFechaHoraReservacion ? fechaFormateada : "" %>">
+                <div class="invalid-feedback">
+                    <%= existeFechaHoraReservacionError ? fechaHoraReservacionError : "" %>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputHora">Hora de reservación</label>
+                <input
+                        type="time"
+                        class="form-control"
+                        id="inputCanchaTipo"
+                        name="horaReservacion"
+                        value="<%= existeHoraReservacion ? hours+":"+minutes : "" %>">
+                <div class="invalid-feedback">
+                    <%= existeHoraReservacionError ? horaReservacionError : "" %>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCancha">Equipo</label>
+                <select
+                        id="inputCancha"
+                        class="form-control"
+                        name="equipo">
+                    <option selected><%= existeEquipo ? equipo : "Seleccione..." %></option>
+                    <% equiposArray.forEach((equipoObjeto) => { %>
+                        <option><%= equipoObjeto.nombre%></option>
+                    <%})%>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputCantidad">Cantidad</label>
+                <input
+                        type="text"
+                        class="form-control <%= existeCantidadEquipoError ? "is-invalid" : "" %>"
+                        id="inputCantidad"
+                        name="cantidadEquipo"
+                        value="<%= existeCantidadEquipo ? cantidadEquipo : "" %>">
+                <div class="invalid-feedback">
+                    <%= existeCantidadEquipoError ? cantidadEquipoError : "" %>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputTiempoReservacion">Tiempo de reservación (horas)</label>
+                <input
+                        type="text"
+                        class="form-control <%= existeTiempoReservacionError ? "is-invalid" : "" %>"
+                id="inputCanchaTipo"
+                name="tiempoReservacion"
+                value="<%= existeTiempoReservacion ? tiempoReservacion : "" %>">
+                <div class="invalid-feedback">
+                    <%= existeTiempoReservacionError ? tiempoReservacionError : "" %>
+                </div>
+            </div>
+            <% if(existeReservacion){ %>
+            <div class="form-group col-md-6">
+                <label for="inputEstado">Estado</label>
+                <select
+                        id="inputEstado"
+                        class="form-control"
+                        name="estado">
+                    <option selected><%= existeEstado ? estado : "Seleccione..."%></option>
+                    <option>Cancelada</option>
+                    <option>En proceso</option>
+                    <option>Programada</option>
+                </select>
+            </div>
+            <% } %>
+        </div>
+        <button type="submit" class="btn btn-secondary"><%= existeReservacion ? "Guardar": "Crear"%></button>
+        <button type="reset" class="btn btn-light">Limpiar</button>
+    </form>
+</div>
+
+<%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Reservaciones</title>
+
+    <style>
+
+    </style>
+    <%- include("../compartido/estilos-generales/estilos-generales-component.ejs") %>
+
+</head>
+<body>
+
+<% const existeError= typeof parametrosConsulta.error!= "undefined"%>
+<% const existeMensaje= typeof parametrosConsulta.mensaje!= "undefined"%>
+
+<% const existeCurrentUserRol= typeof currentUserRol!= "undefined"%>
+
+<% if(!existeCurrentUserRol){currentUserRol="Cliente"} %>
+
+<% const activeDict={
+    "inicio": false,
+    "reservacion":true,
+    "cliente": false,
+    "usuario": false,
+    "cancha": false,
+    "equipo": false,
+    "rol": false,
+    "currentUserRol": currentUserRol
+}%>
+<%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
+<div class="container">
+    <h1>Reservaciones</h1>
+    <% if (existeError){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= parametrosConsulta.error%>
+        </div>
+    <% } %>
+    <% if(existeMensaje) { %>
+        <div class="alert alert-success" role="alert">
+            <%= parametrosConsulta.mensaje%>
+        </div>
+    <%}%>
+    <form action="/reservaciones"
+          method="get">
+        <div class="input-group mb-3">
+            <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Example text with button addon"
+                    aria-describedby="button-addon1"
+                    name="busqueda"
+                    id="busqueda">
+            <div class="input-group-prepend">
+                <button class="btn btn-secondary" type="submit" id="busqueda">Buscar</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <% const today = new Date();
+        const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        %>
+        <div class="col-lg-1">
+            <%= date %>
+        </div>
+        <div class="col-lg-2">
+            <a href="/reservaciones/crear">
+                <button type="submit" class="btn btn-secondary">Nueva Reservación</button>
+            </a>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre de Cancha</th>
+            <th scope="col">Estado de Reserva</th>
+            <th scope="col">Fecha y hora de Reserva</th>
+            <th scope="col">Tiempo de Reserva</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% let counter = 1%>
+        <% arregloReservaciones.forEach((reservacionObjeto) => { %>
+            <tr>
+                <th scope="row"><%= counter%></th>
+                <% let fechaHoraReservacionFormateada = reservacionObjeto.fechaHoraReservacion.getFullYear()+'-'+(reservacionObjeto.fechaHoraReservacion.getMonth()+1)+'-'+reservacionObjeto.fechaHoraReservacion.getDate()%>
+                <% let hours = reservacionObjeto.fechaHoraReservacion.getHours() %>
+                <% let minutes = reservacionObjeto.fechaHoraReservacion.getMinutes() %>
+                <% if(hours == 0){hours="00"} %>
+                <% if(minutes == 0){minutes="00"} %>
+                <% fechaHoraReservacionFormateada = fechaHoraReservacionFormateada+" "+ hours+":"+ minutes%>
+                <td><%= reservacionObjeto.cancha.nombre %></td>
+                <td><%= reservacionObjeto.estado%></td>
+                <td><%= fechaHoraReservacionFormateada%></td>
+                <td><%= reservacionObjeto.tiempoReservacion + " horas"%></td>
+                <td>
+                    <a href="/reservaciones/editar/<%= reservacionObjeto.id%>">
+                        <button type="submit" class="btn btn-secondary">Detalles</button>
+                    </a>
+                    <form action="/reservaciones/eliminarDesdeVista/<%= reservacionObjeto.id%>"
+                          method="post">
+                        <button type="submit" class="btn btn-secondary">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <% counter+=1%>
+        <%})%>
+        </tbody>
+    </table>
+</div>
+
+<%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>
+</body>
+</html>

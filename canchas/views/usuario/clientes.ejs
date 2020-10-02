@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Clientes</title>
+
+    <style>
+
+    </style>
+    <%- include("../compartido/estilos-generales/estilos-generales-component.ejs") %>
+
+</head>
+<body>
+
+<% const activeDict={
+    "inicio": false,
+    "reservacion":false,
+    "cliente": true,
+    "usuario": false,
+    "cancha": false,
+    "equipo": false,
+    "rol": false,
+}%>
+<%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
+<div class="container">
+    <h1>Clientes</h1>
+    <div class="row">
+        <% const today = new Date();
+        const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        %>
+        <div class="col-lg-1">
+            <%= date %>
+        </div>
+        <div class="col-lg-2">
+            <a href="/usuarios/crear/cliente">
+                <button type="submit" class="btn btn-secondary">Nuevo Cliente</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+<%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>
+</body>
+</html>
