@@ -98,7 +98,7 @@
                         name="usuario"
                         value="<%= existeUsuario ? usuario : "" %>"
                         placeholder="Ingrese el nombre del rol, por ejemplo usuario"
-                        <% existeReservacion? "readonly":"" %>>
+                        <%= existeReservacion? "readonly":"" %>>
                 <div class="invalid-feedback">
                     <%= existeUsuarioError ? usuarioError : "" %>
                 </div>

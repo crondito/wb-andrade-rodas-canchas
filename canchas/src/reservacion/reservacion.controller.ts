@@ -521,4 +521,19 @@ export class ReservacionController {
             throw new BadRequestException("Error validando" + error)
         }
     }
+
+    @Post("eliminarDesdeVista/:id")
+    async eliminarDesdeVista(
+        @Param() parametrosRuta,
+        @Res() res
+    ){
+        try {
+            const id = Number(parametrosRuta.id);
+            await this._reservacionService.eliminarUno(id);
+            return res.redirect("/reservaciones?mensaje=Reservación eliminada")
+        }catch (error){
+            console.error("Error", error);
+            return res.redirect("/reservaciones?error= Error eliminando reservación")
+        }
+    }
 }

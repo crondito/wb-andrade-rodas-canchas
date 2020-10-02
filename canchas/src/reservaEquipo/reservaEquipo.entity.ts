@@ -12,7 +12,10 @@ export class ReservaEquipoEntity {
 
     @ManyToOne(
         type => ReservacionEntity,
-        reservacion => reservacion.reservacionEquipos
+        reservacion => reservacion.reservacionEquipos,
+        {
+            onDelete: 'CASCADE',
+        }
     )
     reservaciones: ReservacionEntity;
 
