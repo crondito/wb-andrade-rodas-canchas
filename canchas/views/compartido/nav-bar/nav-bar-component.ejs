@@ -6,11 +6,17 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link<%= active["inicio"] ? " active":""%>" href="/home">Inicio <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link<%= active["reservacion"] ? " active":""%>" href="/reservaciones">Reservaciones</a>
-            <a class="nav-item nav-link<%= active["usuario"] ? " active":""%>" href="/usuarios">Usuarios</a>
-            <a class="nav-item nav-link<%= active["rol"] ? " active":""%>" href="/roles">Roles</a>
-            <a class="nav-item nav-link<%= active["cancha"] ? " active":""%>" href="/canchas">Canchas</a>
-            <a class="nav-item nav-link<%= active["equipo"] ? " active":""%>" href="/equipos">Equipos</a>
+            <% if(active["currentUserRol"]=="Administrador"){%>
+                <a class="nav-item nav-link<%= active["usuario"] ? " active":""%>" href="/usuarios">Usuarios</a>
+                <a class="nav-item nav-link<%= active["rol"] ? " active":""%>" href="/roles">Roles</a>
+            <%}%>
+            <% if(active["currentUserRol"]=="Administrador" || active["currentUserRol"]=="Empleado"){%>
+                    <a class="nav-item nav-link<%= active["cancha"] ? " active":""%>" href="/canchas">Canchas</a>
+                    <a class="nav-item nav-link<%= active["equipo"] ? " active":""%>" href="/equipos">Equipos</a>
+            <%}%>
+            <% if(active["currentUserRol"]=="Administrador" || active["currentUserRol"]=="Empleado" || active["currentUserRol"]=="Cliente"){%>
+                <a class="nav-item nav-link<%= active["reservacion"] ? " active":""%>" href="/reservaciones">Reservaciones</a>
+            <%}%>
             <a class="nav-item nav-link" href="/logout">Salir</a>
         </div>
     </div>

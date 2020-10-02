@@ -17,6 +17,9 @@ import {RolService} from "./rol.service";
     ],
     providers: [
         RolService
+    ],
+    exports:[
+        RolService
     ]
 }) export class RolModule {
 

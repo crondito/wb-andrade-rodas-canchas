@@ -7,7 +7,7 @@ import {
     NotFoundException, Param,
     Post,
     Query,
-    Res
+    Res, Session
 } from "@nestjs/common";
 import {CanchaService} from "./cancha.service";
 import {validate, ValidationError} from "class-validator";
@@ -24,8 +24,14 @@ export class CanchaController {
     @Get()
     async vistaHome(
         @Query() parametrosConsulta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         let resultadoEncontrado
         let busqueda = ""
         const existeBusqueda = typeof parametrosConsulta.busqueda!="undefined";
@@ -42,7 +48,8 @@ export class CanchaController {
                 "cancha/canchas",
                 {
                     arregloCanchas: resultadoEncontrado,
-                    parametrosConsulta: parametrosConsulta
+                    parametrosConsulta: parametrosConsulta,
+                    currentUserRol: currentUserRol
                 }
             )
         }else{
@@ -53,8 +60,14 @@ export class CanchaController {
     @Get("crear")
     vistaCrear(
         @Query() parametrosConsulta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         res.render(
             "cancha/crear-cancha",
             {
@@ -67,6 +80,7 @@ export class CanchaController {
                 comentario: parametrosConsulta.comentario,
                 tipo: parametrosConsulta.tipo,
                 estado: parametrosConsulta.estado,
+                currentUserRol: currentUserRol
             }
         )
     }
@@ -215,8 +229,14 @@ export class CanchaController {
     async vistaEditar(
         @Query() parametrosConsulta,
         @Param() parametrosRuta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         const id = Number(parametrosRuta.id)
         let canchaEncontrado
         try{
@@ -231,6 +251,7 @@ export class CanchaController {
                 {
                     error: parametrosConsulta.error,
                     cancha: canchaEncontrado,
+                    currentUserRol: currentUserRol
                 }
             )
         }else{

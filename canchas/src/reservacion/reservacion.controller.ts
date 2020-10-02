@@ -7,7 +7,7 @@ import {
     NotFoundException, Param,
     Post,
     Query,
-    Res
+    Res, Session
 } from "@nestjs/common";
 import {ReservacionService} from "./reservacion.service";
 import {CanchaService} from "../cancha/cancha.service";
@@ -36,8 +36,14 @@ export class ReservacionController {
     @Get()
     async vistaHome(
         @Query() parametrosConsulta,
-        @Res() res
-    ) {
+        @Res() res,
+        @Session() session
+    ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         let resultadoEncontrado
         let busqueda = ""
         const existeBusqueda = typeof parametrosConsulta.busqueda != "undefined";
@@ -61,7 +67,8 @@ export class ReservacionController {
                 "reservacion/reservaciones",
                 {
                     arregloReservaciones: resultadoEncontrado,
-                    parametrosConsulta: parametrosConsulta
+                    parametrosConsulta: parametrosConsulta,
+                    currentUserRol: currentUserRol
                 }
             )
         } else {
@@ -72,8 +79,14 @@ export class ReservacionController {
     @Get("crear")
     async vistaCrear(
         @Query() parametrosConsulta,
-        @Res() res
-    ) {
+        @Res() res,
+        @Session() session
+    ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         let canchasEncontradas, equiposEncontrados
         let busqueda = ""
         const existeBusqueda = typeof parametrosConsulta.busqueda != "undefined";
@@ -104,6 +117,7 @@ export class ReservacionController {
                     cancha: parametrosConsulta.cancha,
                     canchasArray: [],
                     equiposArray: [],
+                    currentUserRol: currentUserRol
                 }
             )
         }
@@ -127,6 +141,7 @@ export class ReservacionController {
                 cancha: parametrosConsulta.cancha,
                 canchasArray: canchasEncontradas,
                 equiposArray: equiposEncontrados,
+                currentUserRol: currentUserRol
             }
         )
     }
@@ -282,8 +297,14 @@ export class ReservacionController {
     async vistaEditar(
         @Query() parametrosConsulta,
         @Param() parametrosRuta,
-        @Res() res
-    ) {
+        @Res() res,
+        @Session() session
+    ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         const id = Number(parametrosRuta.id)
         let canchasEncontradas, equiposEncontrados, reservacionEncontrada
         let busqueda = ""
@@ -315,6 +336,7 @@ export class ReservacionController {
                     cancha: parametrosConsulta.cancha,
                     canchasArray: [],
                     equiposArray: [],
+                    currentUserRol: currentUserRol
                 }
             )
         }
@@ -359,6 +381,7 @@ export class ReservacionController {
                     reservacion: reservacionEncontrada,
                     canchasArray: canchasEncontradas,
                     equiposArray: equiposEncontrados,
+                    currentUserRol: currentUserRol
                 }
             )
         } else {

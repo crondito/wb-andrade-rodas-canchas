@@ -8,19 +8,21 @@ import {
     Param,
     Post,
     Query,
-    Res
+    Res, Session
 } from "@nestjs/common";
 import {UsuarioCreateDTO} from "./dto/usuario.create";
 import {validate, ValidationError} from "class-validator";
 import {UsuarioService} from "./usuario.service";
 import {UsuarioEntity} from "./usuario.entity";
 import {UsuarioUpdateDTO} from "./dto/usuario.update";
+import {RolService} from "../rol/rol.service";
 
 @Controller("usuarios")
 export class UsuarioController {
 
     constructor(
-        private readonly _usuarioService: UsuarioService
+        private readonly _usuarioService: UsuarioService,
+        private readonly _rolService: RolService
     ) {
     }
 
@@ -34,8 +36,14 @@ export class UsuarioController {
     @Get()
     async vistaUsuario(
         @Query() parametrosConsulta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         let resultadoEncontrado
         let busqueda = ""
         const existeBusqueda = typeof parametrosConsulta.busqueda!="undefined";
@@ -52,7 +60,8 @@ export class UsuarioController {
                 "usuario/usuarios",
                 {
                     arregloUsuarios: resultadoEncontrado,
-                    parametrosConsulta: parametrosConsulta
+                    parametrosConsulta: parametrosConsulta,
+                    currentUserRol: currentUserRol
                 }
             )
         }else{
@@ -75,16 +84,30 @@ export class UsuarioController {
     // }
 
     @Get("crear")
-    vistaCrear(
+    async vistaCrear(
         @Query() parametrosConsulta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
+        let rolesEncontrados;
+        try{
+            rolesEncontrados = await this._rolService.buscarTodos("")
+        }catch (error){
+            rolesEncontrados = []
+        }
         res.render(
             "usuario/crear-usuario",
             {
                 error: parametrosConsulta.error,
                 nombreError: parametrosConsulta.nombreError,
-                descripcionError: parametrosConsulta.descripcionError,
+                apellidoError: parametrosConsulta.apellidoError,
+                numeroCedulaError: parametrosConsulta.numeroCedulaError,
+                telefonoError: parametrosConsulta.telefonoError,
                 nombre: parametrosConsulta.nombre,
                 apellido: parametrosConsulta.apellido,
                 numeroCedula: parametrosConsulta.numeroCedula,
@@ -92,6 +115,8 @@ export class UsuarioController {
                 // numeroRuc: parametrosConsulta.numeroRuc,
                 telefono: parametrosConsulta.telefono,
                 tipo: parametrosConsulta.tipo,
+                arregloRoles: rolesEncontrados,
+                currentUserRol: currentUserRol
             }
         )
     }
@@ -109,6 +134,9 @@ export class UsuarioController {
         // usuarioValidado.numeroRuc = parametrosCuerpo.numeroRuc;
         usuarioValidado.telefono = parametrosCuerpo.telefono;
         usuarioValidado.tipo = parametrosCuerpo.tipo;
+
+        parametrosCuerpo.numeroPasaporte = parametrosCuerpo.numeroCedula;
+        parametrosCuerpo.numeroRuc = parametrosCuerpo.numeroCedula;
 
         let nombreConsulta, apellidoConsulta, numeroCedulaConsulta, telefonoConsulta, tipoConsulta, nombreError="", apellidoError="";
         try {
@@ -164,7 +192,7 @@ export class UsuarioController {
         try {
             const errores: ValidationError[] = await validate(UsuarioEditadoValidado)
             if(errores.length > 0) {
-                console.log("Errores", errores);
+                console.log(parametrosCuerpo.tipo+"Errores", errores);
                 for (const error of errores) {
                     if (error["property"] == "nombre") {
                         nombreError = "nombreError=Error en nombre"
@@ -181,8 +209,8 @@ export class UsuarioController {
                     nombre: parametrosCuerpo.nombre,
                     apellido: parametrosCuerpo.apellido,
                     numeroCedula: parametrosCuerpo.numeroCedula,
-                    // numeroPasaporte: parametrosCuerpo.numeroPasaporte,
-                    // numeroRuc: parametrosCuerpo.numeroRuc,
+                    numeroPasaporte: parametrosCuerpo.numeroCedula,
+                    numeroRuc: parametrosCuerpo.numeroCedula,
                     telefono: parametrosCuerpo.telefono,
                     tipo: parametrosCuerpo.tipo,
                 } as UsuarioEntity;
@@ -208,8 +236,14 @@ export class UsuarioController {
     async vistaEditar(
         @Query() parametrosConsulta,
         @Param() parametrosRuta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         const id = Number(parametrosRuta.id)
         let usuarioEncontrado
         try{
@@ -218,12 +252,20 @@ export class UsuarioController {
             console.error("Error del servidor"+error)
             return res.redirect("/usuarios?error=Error buscando Usuario")
         }
+        let rolesEncontrados
+        try{
+            rolesEncontrados = await this._rolService.buscarTodos("")
+        }catch (error){
+            rolesEncontrados = []
+        }
         if(usuarioEncontrado){
             return res.render(
                 "usuario/crear-usuario",
                 {
                     error: parametrosConsulta.error,
                     usuario: usuarioEncontrado,
+                    arregloRoles: rolesEncontrados,
+                    currentUserRol: currentUserRol
                 }
             )
         }else{

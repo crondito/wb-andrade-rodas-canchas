@@ -1,4 +1,4 @@
-import {IsAlpha, IsEmpty, IsNotEmpty, IsNumberString, MaxLength, MinLength} from "class-validator";
+import {IsAlpha, IsEmpty, IsNotEmpty, IsNumberString, IsPhoneNumber, MaxLength, MinLength} from "class-validator";
 
 export class UsuarioUpdateDTO {
 
@@ -23,7 +23,7 @@ export class UsuarioUpdateDTO {
     @MaxLength(60)
     apellido: string;
 
-    @IsNumberString()
+    @IsPhoneNumber("null")
     telefono: string;
 
     // @IsAlpha()

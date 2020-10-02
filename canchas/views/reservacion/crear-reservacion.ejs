@@ -67,6 +67,10 @@
     <% if(minutes === 0){minutes="00"} %>
 <% } %>
 
+<% const existeCurrentUserRol= typeof currentUserRol!= "undefined"%>
+
+<% if(!existeCurrentUserRol){currentUserRol="Cliente"} %>
+
 <% const activeDict={
     "inicio": false,
     "reservacion":true,
@@ -75,6 +79,7 @@
     "cancha": false,
     "equipo": false,
     "rol": false,
+    "currentUserRol": currentUserRol
 }%>
 <%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 

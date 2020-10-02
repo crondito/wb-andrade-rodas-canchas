@@ -7,7 +7,7 @@ import {
     NotFoundException, Param,
     Post,
     Query,
-    Res
+    Res, Session
 } from "@nestjs/common";
 import {EquipoService} from "./equipo.service";
 import {EquipoCreateDTO} from "./dto/equipo.create";
@@ -24,8 +24,14 @@ export class EquipoController {
     @Get()
     async vistaHome(
         @Query() parametrosConsulta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         let resultadoEncontrado
         let busqueda = ""
         const existeBusqueda = typeof parametrosConsulta.busqueda!="undefined"
@@ -42,7 +48,8 @@ export class EquipoController {
                 "equipo/equipos",
                 {
                     arregloEquipos: resultadoEncontrado,
-                    parametrosConsulta: parametrosConsulta
+                    parametrosConsulta: parametrosConsulta,
+                    currentUserRol: currentUserRol
                 }
             )
         }else{
@@ -53,8 +60,14 @@ export class EquipoController {
     @Get("crear")
     vistaCrear(
         @Query() parametrosConsulta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         res.render(
             "equipo/crear-equipo",
             {
@@ -62,7 +75,8 @@ export class EquipoController {
                 nombreError: parametrosConsulta.nombreError,
                 descripcionError: parametrosConsulta.descripcionError,
                 nombre: parametrosConsulta.nombre,
-                descripcion: parametrosConsulta.descripcion
+                descripcion: parametrosConsulta.descripcion,
+                currentUserRol: currentUserRol
             }
         )
     }
@@ -160,8 +174,14 @@ export class EquipoController {
     async vistaEditar(
         @Query() parametrosConsulta,
         @Param() parametrosRuta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         const id = Number(parametrosRuta.id)
         let equipoEncontrado
         try {
@@ -176,6 +196,7 @@ export class EquipoController {
                 {
                     error: parametrosConsulta.error,
                     equipo: equipoEncontrado,
+                    currentUserRol: currentUserRol
                 }
             )
         }else{

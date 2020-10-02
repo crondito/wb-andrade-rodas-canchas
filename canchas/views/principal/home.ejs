@@ -11,6 +11,10 @@
 
 </head>
 <body>
+<% const existeCurrentUserRol= typeof currentUserRol!= "undefined"%>
+
+<% if(!existeCurrentUserRol){currentUserRol="Cliente"} %>
+
 <% const activeDict={
     "inicio": true,
     "reservacion":false,
@@ -19,28 +23,56 @@
     "cancha": false,
     "equipo": false,
     "rol": false,
+    "currentUserRol": currentUserRol
 }%>
 <%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 <% const existeNumeroCanchas = typeof numeroCanchas!= "undefined"%>
 <div class="container">
     <h1>Bienvenido!</h1>
-    <form action="/usuario/vista/inicio"
-          method="get">
-        <div class="form-group">
-            <label for="busqueda">Búsqueda:</label>
-            <input id="busqueda" type="text" name="busqueda">
+    <form action="/home"
+          method="post">
+        <div class="form-row">
+            <div class="form-group sm-3">
+                <label for="inputTipo">Buscar en:</label>
+                <select
+                        id="inputTipo"
+                        class="form-control"
+                        name="tipo">
+                    <option selected>Seleccione...</option>
+                    <% if(currentUserRol=="Administrador"){%>
+                        <option>Usuarios</option>
+                        <option>Roles</option>
+                    <%}%>
+                    <% if(currentUserRol=="Administrador" || currentUserRol=="Empleado"){%>
+                        <option>Canchas</option>
+                        <option>Equipos</option>
+                    <%}%>
+                    <% if(currentUserRol=="Administrador" || currentUserRol=="Empleado" || currentUserRol=="Cliente"){%>
+                    <option>Reservaciones</option>
+                    <%}%>
+                </select>
+            </div>
+            <div class="input-group sm-3">
+                <input
+                        type="text"
+                        class="form-control"
+                        aria-label="Example text with button addon"
+                        aria-describedby="button-addon1"
+                        name="busqueda"
+                        id="busqueda">
+                <div class="input-group-prepend">
+                    <button class="btn btn-secondary" type="submit" id="busqueda">Buscar</button>
+                </div>
+            </div>
         </div>
-        <div class="container form-group">
-            <button type="submit" class="btn btn-secondary"> Buscar</button>
-        </div>
-        <div class="container form-group">
+        <div class="d-flex justify-content-center">
             <img src="/cancha.svg" alt="Icono de una cancha">
-
-            <% let plural = "s" %>
-            <% if(existeNumeroCanchas && numeroCanchas == 1) { %>
-                <% plural = "" %>
-            <% } %>
-
+        </div>
+        <% let plural = "s" %>
+        <% if(existeNumeroCanchas && numeroCanchas == 1) { %>
+            <% plural = "" %>
+        <% } %>
+        <div class="d-flex justify-content-center">
             <p><%= existeNumeroCanchas ? numeroCanchas: "0"%> cancha<%= plural%> disponible<%= plural%></p>
         </div>
     </form>

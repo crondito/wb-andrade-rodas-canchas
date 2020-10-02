@@ -13,6 +13,10 @@
 </head>
 <body>
 
+<% const existeCurrentUserRol= typeof currentUserRol!= "undefined"%>
+
+<% if(!existeCurrentUserRol){currentUserRol="Cliente"} %>
+
 <% const activeDict={
     "inicio": false,
     "reservacion":false,
@@ -21,6 +25,7 @@
     "cancha": false,
     "equipo": false,
     "rol": false,
+    "currentUserRol": currentUserRol
 }%>
 <%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 
@@ -72,16 +77,21 @@
 <!--</form>-->
 
 <% const existeUser = typeof usuario != "undefined" %>
+<% const existeRoles = typeof arregloRoles != "undefined" %>
+<% let existeError = typeof error != "undefined" %>
+<% let existeNombreError = typeof nombreError !== "undefined" %>
+<% let existeApellidoError = typeof apellidoError !== "undefined" %>
+<% let existeNumeroCedulaError = typeof numeroCedulaError !== "undefined" %>
+<% let existeTelefonoError = typeof telefonoError !== "undefined" %>
+<% let existeTipoError = typeof tipoError !== "undefined" %>
 
 <% let existeNombre = typeof nombre !== "undefined" %>
 <% let existeApellido = typeof apellido !== "undefined" %>
 <% let existeNumeroCedula = typeof numeroCedula !== "undefined" %>
-<% let existeNumeroPasaporte = typeof numeroPasaporte !== "undefined" %>
-<% let existeNumeroRuc = typeof numeroRuc !== "undefined" %>
 <% let existeTelefono = typeof telefono !== "undefined" %>
 <% let existeTipo = typeof tipo !== "undefined" %>
 
-<h1><%= existeUser ? "Editar" : "Crear"  %> Usuario </h1>
+
 
 <% if(existeUser) { %>
     <% existeNombre = true %>
@@ -97,14 +107,93 @@
     <% // numeroPasaporte = usuario.numeroPasaporte %>
     <% // numeroRuc = usuario.numeroRuc %>
     <% telefono = usuario.telefono %>
-    <% telefono = usuario.tipo %>
+    <% tipo = usuario.tipo %>
 <% } %>
 
-<% if(typeof error !== "undefined") {%>
+<div class="container">
+    <h1><%= existeUser ? "Editar" : "Crear"  %> Usuario </h1>
+    <% if (existeError){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+    <% } %>
+        <form action="<%= existeUser? "/usuarios/editarDesdeVista/" + usuario.id : '/usuarios/crearDesdeVista'%>" method="POST">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputNombre">Nombre</label>
+                <input
+                        type="text"
+                        class="form-control <%= existeNombreError ? "is-invalid" : "" %>"
+                        id="inputNombre"
+                        name="nombre"
+                        value="<%= existeNombre ? nombre : "" %>">
+                <div class="invalid-feedback">
+                    <%= existeNombreError ? nombreError : "" %>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputApellido">Apellido</label>
+                <input
+                        type="text"
+                        class="form-control <%= existeApellidoError ? "is-invalid" : "" %>"
+                        id="inputApellido"
+                        name="apellido"
+                        value="<%= existeApellido ? apellido : "" %>">
+                <div class="invalid-feedback">
+                    <%= existeApellidoError ? apellidoError : "" %>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCedula">Cedula</label>
+                <input
+                        type="text"
+                        class="form-control <%= existeNumeroCedulaError ? "is-invalid": "" %>"
+                        id="inputCedula"
+                        name="numeroCedula"
+                        value="<%= existeNumeroCedula ? numeroCedula : "" %>">
+                <div class="invalid-feedback">
+                    <%= existeNumeroCedulaError ? numeroCedulaError : "" %>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputTelefono">Teléfono</label>
+                <input
+                        type="text"
+                        class="form-control <%= existeTelefonoError ? "is-invalid": "" %>"
+                        id="inputTelefono"
+                        name="telefono"
+                        value="<%= existeTelefono ? telefono : "" %>">
+                <div class="invalid-feedback">
+                    <%= existeTelefonoError ? telefonoError : "" %>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputTipo">Tipo</label>
+                <select
+                        id="inputTipo"
+                        class="form-control <%= existeTipoError ? "is-invalid": "" %>"
+                        name="tipo">
+                    <option selected><%= existeTipo ? tipo : "Seleccione..." %></option>
+                    <% arregloRoles.forEach((rolObjeto) => { %>
+                    <option><%= rolObjeto.nombre %></option>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-secondary"><%= existeUser ? "Guardar": "Crear"%></button>
+        <button type="reset" class="btn btn-light">Limpiar</button>
+    </form>
+</div>
+
+<!--<% if(typeof error !== "undefined") {%>
     <p>MENSAJE DE ERROR: <%= error %> </p>
 <%  } %>
 
-<form action="<%= existeUser? '/usuarios/editarDesdeVista/' + usuario.id : '/usuarios/crearDesdeVista'%>" method="POST">
+<form action="<%= existeUser? "/usuarios/editarDesdeVista/" + usuario.id : '/usuarios/crearDesdeVista'%>" method="POST">
 
     <label for="nombreID">Nombre</label>
     <input id="nombreID" type="text" name="nombre" value="<%= existeNombre? nombre : '' %>">
@@ -118,13 +207,13 @@
     <input id="cedulaID" type="text" name="numeroCedula" value="<%= existeNumeroCedula? numeroCedula : '' %>">
     <br>
 
-<!--    <label for="pasaporteID">Pasaporte</label>-->
-<!--    <input id="pasaporteID" type="text" name="numeroPasaporte" value="<%//= existeNumeroPasaporte? numeroPasaporte : '' %>">-->
-<!--    <br>-->
+&lt;!&ndash;    <label for="pasaporteID">Pasaporte</label>&ndash;&gt;
+&lt;!&ndash;    <input id="pasaporteID" type="text" name="numeroPasaporte" value="<%//= existeNumeroPasaporte? numeroPasaporte : '' %>">&ndash;&gt;
+&lt;!&ndash;    <br>&ndash;&gt;
 
-<!--    <label for="rucID">Ruc</label>-->
-<!--    <input id="rucID" type="text" name="numeroRuc" value="<%//= existeNumeroRuc? numeroRuc : '' %>">-->
-<!--    <br>-->
+&lt;!&ndash;    <label for="rucID">Ruc</label>&ndash;&gt;
+&lt;!&ndash;    <input id="rucID" type="text" name="numeroRuc" value="<%//= existeNumeroRuc? numeroRuc : '' %>">&ndash;&gt;
+&lt;!&ndash;    <br>&ndash;&gt;
 
     <label for="telefonoID">Teléfono</label>
     <input id="telefonoID" type="text" name="telefono" value="<%= existeTelefono? telefono : '' %>">
@@ -141,7 +230,7 @@
     <button type="submit">SUBMIT</button>
     <button type="reset">RESET</button>
 
-</form>
+</form>-->
 
 <%- include("../compartido/funcionalidad-general/funcionalidad-general-component.ejs") %>
 </body>

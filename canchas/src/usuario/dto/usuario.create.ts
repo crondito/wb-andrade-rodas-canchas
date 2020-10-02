@@ -1,4 +1,13 @@
-import {IsAlpha, IsDecimal, IsNotEmpty, IsNumber, IsNumberString, MaxLength, MinLength} from "class-validator";
+import {
+    IsAlpha,
+    IsDecimal,
+    IsNotEmpty,
+    IsNumber,
+    IsNumberString,
+    IsPhoneNumber,
+    MaxLength,
+    MinLength
+} from "class-validator";
 
 export class UsuarioCreateDTO {
     @IsNumberString()
@@ -22,7 +31,7 @@ export class UsuarioCreateDTO {
     @MaxLength(60)
     apellido: string;
 
-    @IsNumberString()
+    @IsPhoneNumber("null")
     telefono: string;
 
     // @IsAlpha()

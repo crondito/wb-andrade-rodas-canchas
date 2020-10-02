@@ -6,7 +6,7 @@ import {
     InternalServerErrorException, NotFoundException, Param,
     Post,
     Query,
-    Res
+    Res, Session
 } from "@nestjs/common";
 import {RolCreateDTO} from "./dto/rol.create";
 import {validate, ValidationError} from "class-validator";
@@ -23,8 +23,14 @@ export class RolController{
     @Get()
     async vistaHome(
         @Query() parametrosConsulta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         let resultadoEncontrado
         let busqueda = ""
         const existeBusqueda = typeof parametrosConsulta.busqueda!="undefined";
@@ -41,7 +47,8 @@ export class RolController{
                 "rol/roles",
                 {
                     arregloRoles: resultadoEncontrado,
-                    parametrosConsulta: parametrosConsulta
+                    parametrosConsulta: parametrosConsulta,
+                    currentUserRol: currentUserRol
                 }
             )
         }else{
@@ -52,8 +59,14 @@ export class RolController{
     @Get("crear")
     vistaCrear(
         @Query() parametrosConsulta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         res.render(
             "rol/crear-rol",
             {
@@ -61,7 +74,8 @@ export class RolController{
                 nombreError: parametrosConsulta.nombreError,
                 descripcionError: parametrosConsulta.descripcionError,
                 nombre: parametrosConsulta.nombre,
-                descripcion: parametrosConsulta.descripcion
+                descripcion: parametrosConsulta.descripcion,
+                currentUserRol: currentUserRol
             }
         )
     }
@@ -160,8 +174,14 @@ export class RolController{
     async vistaEditar(
         @Query() parametrosConsulta,
         @Param() parametrosRuta,
-        @Res() res
+        @Res() res,
+        @Session() session
     ){
+        const estaLogueado = session.usuario;
+        const currentUserRol = session.rol;
+        if(!estaLogueado){
+            return res.redirect('login');
+        }
         const id = Number(parametrosRuta.id)
         let rolEncontrado
         try{
@@ -176,6 +196,7 @@ export class RolController{
                 {
                     error: parametrosConsulta.error,
                     rol: rolEncontrado,
+                    currentUserRol: currentUserRol
                 }
             )
         }else{

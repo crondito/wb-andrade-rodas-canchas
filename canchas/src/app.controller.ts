@@ -1,12 +1,14 @@
-import {Body, Controller, Get, Post, Req, Res, Session} from '@nestjs/common';
+import {Body, Controller, Get, Post, Query, Req, Res, Session} from '@nestjs/common';
 import { AppService } from './app.service';
 import { CanchaService } from "./cancha/cancha.service";
+import {UsuarioService} from "./usuario/usuario.service";
 
 @Controller()
 export class AppController {
   constructor(
       private readonly appService: AppService,
-      private readonly _canchaService: CanchaService
+      private readonly _canchaService: CanchaService,
+      private readonly _usuarioService: UsuarioService
   ) {
   }
 
@@ -20,21 +22,28 @@ export class AppController {
   @Get('home')
   async vistaHome(
       @Res() res,
-      @Session() session,
+      @Session() session
   ){
+    const estaLogueado = session.usuario;
+    const currentUserRol = session.rol;
+    if(!estaLogueado){
+      return res.redirect('login');
+    }
     let canchasEncontradas;
-    const estaLogeado = session.usuario;
     try {
       canchasEncontradas = await this._canchaService.buscarCanchasDisponibles()
+      canchasEncontradas = canchasEncontradas[1]
     }catch (error){
       canchasEncontradas = "0"
     }
-    if (estaLogeado) {
+    if (estaLogueado) {
       return res.render(
           'principal/home',
           {
             usuario: session.usuario,
-            roles: session.roles
+            rol: session.rol,
+            currentUserRol: currentUserRol,
+            numeroCanchas: canchasEncontradas
           }
       )
     } else {
@@ -48,15 +57,35 @@ export class AppController {
     // )
   }
 
+  @Post("home")
+  buscarDesdeHome(
+      @Body() parametrosCuerpo,
+      @Res() res
+  ){
+    const vista = parametrosCuerpo.tipo.toString().toLowerCase();
+    res.redirect("/"+vista+"?busqueda="+parametrosCuerpo.busqueda)
+  }
+
   @Get('login')
   login(
-      @Res() response
+      @Query() parametrosConsulta,
+      @Res() response,
+      @Session() session
   ) {
-    return response.render('login/login')
+    const estaLogueado = session.usuario;
+    if(estaLogueado){
+      return response.redirect('home');
+    }
+    return response.render(
+        'login/login',
+        {
+          parametrosConsulta: parametrosConsulta
+        }
+    )
   }
 
   @Post('login')
-  loginPost(
+  async loginPost(
       @Body() parametrosConsulta,
       @Res() response,
       @Session() session
@@ -66,10 +95,19 @@ export class AppController {
     const password = parametrosConsulta.password;
     if (usuario == 'admin' && password == 'admin') {
       session.usuario = usuario
-      session.roles = ['Administrador']
+      session.rol = 'Administrador'
       return response.redirect('home');
     } else {
-          return response.redirect('login')
+        let usuarioEncontrado
+        try {
+          usuarioEncontrado = await this._usuarioService.buscarTodos(usuario)
+          session.usuario = usuarioEncontrado[0].numeroCedula
+          session.rol = usuarioEncontrado[0].tipo
+          return response.redirect('home');
+        } catch (error){
+          return response.redirect("/login?error=Error consultando usuario");
+        }
+        return response.redirect("/login?error=Error en username o password");
       }
     }
 
@@ -84,7 +122,7 @@ export class AppController {
           'login/protegido',
           {
             usuario: session.usuario,
-            roles: session.roles
+            rol: session.rol
           }
       )
     } else {
@@ -99,7 +137,7 @@ export class AppController {
       @Req() request
   ) {
     session.username = undefined;
-    session.roles = undefined;
+    session.rol = undefined;
     request.session.destroy();
     return response.redirect('login')
   }

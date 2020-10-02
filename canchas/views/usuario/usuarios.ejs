@@ -15,6 +15,10 @@
 <% const existeError = typeof parametrosConsulta.error != "undefined" %>
 <% const existeMensaje = typeof parametrosConsulta.mensaje != "undefined" %>
 
+<% const existeCurrentUserRol= typeof currentUserRol!= "undefined"%>
+
+<% if(!existeCurrentUserRol){currentUserRol="Cliente"} %>
+
 <% const activeDict={
     "inicio": false,
     "reservacion":false,
@@ -23,6 +27,7 @@
     "cancha": false,
     "equipo": false,
     "rol": false,
+    "currentUserRol": currentUserRol
 }%>
 <%- include("../compartido/nav-bar/nav-bar-component.ejs",{active:activeDict}) %>
 
@@ -55,6 +60,21 @@
             <%= parametrosConsulta.mensaje %>
         </div>
     <% } %>
+    <form action="/usuarios"
+          method="get">
+        <div class="input-group mb-3">
+            <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Example text with button addon"
+                    aria-describedby="button-addon1"
+                    name="busqueda"
+                    id="busqueda">
+            <div class="input-group-prepend">
+                <button class="btn btn-secondary" type="submit" id="busqueda">Buscar</button>
+            </div>
+        </div>
+    </form>
     <div class="row">
         <% const today = new Date();
         const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
