@@ -19,6 +19,8 @@ import {ReservacionEntity} from "./reservacion.entity";
 import {ReservaEquipoCreateDTO} from "../reservaEquipo/dto/reservaEquipo.create";
 import {ReservaEquipoEntity} from "../reservaEquipo/reservaEquipo.entity";
 import {ReservaEquipoService} from "../reservaEquipo/reservaEquipo.service";
+import {ReservacionUpdateDTO} from "./dto/reservacion.update";
+import {ReservaEquipoUpdateDTO} from "../reservaEquipo/dto/reservaEquipo.update";
 
 @Controller("reservaciones")
 export class ReservacionController {
@@ -361,6 +363,162 @@ export class ReservacionController {
             )
         } else {
             return res.redirect("/reservaciones?error=Reservación no encontrada")
+        }
+    }
+
+    @Post("editarDesdeVista/:id")
+    async editarDesdeVista(
+        @Param() parametrosRuta,
+        @Body() parametrosCuerpo,
+        @Res() res
+    ){
+        const reservacionValidada = new ReservacionUpdateDTO();
+        reservacionValidada.fechaHoraReservacion = new Date(parametrosCuerpo.fechaHoraReservacion.toString() + " " + parametrosCuerpo.horaReservacion.toString());
+        reservacionValidada.tiempoReservacion = Number(parametrosCuerpo.tiempoReservacion);
+        reservacionValidada.estado = parametrosCuerpo.estado;
+
+        const reservaEquipoValidada = new ReservaEquipoUpdateDTO();
+        if (parametrosCuerpo.cantidadEquipo == "") {
+            parametrosCuerpo.cantidadEquipo = 0
+        }
+        reservaEquipoValidada.cantidad = Number(parametrosCuerpo.cantidadEquipo);
+
+
+        let fechaHoraReservacionConsulta = "";
+        let horaReservacionConsulta = "";
+        let tiempoReservacionConsulta = "";
+        let estadoConsulta = "";
+        let usuarioConsulta = "";
+        let cantidadEquipoConsulta = "";
+        let equipoConsulta = "";
+        let canchaConsulta = "";
+        let fechaHoraReservacionError = "";
+        let horaReservacionError = "";
+        let tiempoReservacionError = "";
+        let estadoError = "";
+        let usuarioError = "";
+        let cantidadEquipoError = "";
+        let equipoError = "";
+        let canchaError = "";
+
+        let usuarioEncontrado
+        try {
+            usuarioEncontrado = await this._usuarioService.buscarTodos(parametrosCuerpo.usuario)
+            console.error(usuarioEncontrado)
+        } catch (error) {
+            usuarioError = "&usuarioError=Error en CI de usuario"
+
+        }
+        let equipoEncontrado
+        try {
+            equipoEncontrado = await this._equipoService.buscarTodos(parametrosCuerpo.equipo)
+            console.error(equipoEncontrado)
+        } catch (error) {
+            equipoError = "&equipoError=Error en equipo"
+        }
+        let canchaEncontrada
+        try {
+            canchaEncontrada = await this._canchaService.buscarTodos(parametrosCuerpo.cancha)
+            console.error(canchaEncontrada)
+        } catch (error) {
+            canchaError = "&canchaError=Error en cancha"
+        }
+        try {
+            console.error(parametrosCuerpo)
+            const errores: ValidationError[] = await validate(reservacionValidada);
+            const erroresReservaEquipo: ValidationError[] = await validate(reservaEquipoValidada)
+            if (errores.length > 0 || erroresReservaEquipo.length > 0) {
+                console.error("Errores", errores);
+                for (const error of errores) {
+                    if (error["property"] == "fechaHoraReservacion") {
+                        fechaHoraReservacionError = "&fechaHoraReservacionError=Error en Fecha de Reservación"
+                    } else if (error["property"] == "estado") {
+                        estadoError = "&estadoError=Error en estado de reservación"
+                    } else if (error["property"] == "tiempoReservacion") {
+                        tiempoReservacionError = "&tiempoReservacionError=Error en tiempo de reservación"
+                    }
+                }
+                for (const error of erroresReservaEquipo) {
+                    cantidadEquipoError = "&cantidadEquipoError= Error en cantidad de Equipos" + error.toString()
+                }
+                fechaHoraReservacionConsulta = `&fechaHoraReservacion=${parametrosCuerpo.fechaHoraReservacion}`
+                estadoConsulta = `&estado=${parametrosCuerpo.estado}`
+                tiempoReservacionConsulta = `&tiempoReservacion=${parametrosCuerpo.tiempoReservacion}`
+                cantidadEquipoConsulta = `&cantidadEquipo=${parametrosCuerpo.cantidadEquipo}`
+                usuarioConsulta = `&usuario=${parametrosCuerpo.usuario}`
+                equipoConsulta = `&equipo=${parametrosCuerpo.equipo}`
+                canchaConsulta = `&cancha=${parametrosCuerpo.cancha}`
+                return res.redirect("/reservaciones/editar/"+parametrosRuta.id+"?="
+                    + fechaHoraReservacionError
+                    + estadoError
+                    + tiempoReservacionError
+                    + cantidadEquipoError
+                    + usuarioError
+                    + fechaHoraReservacionConsulta
+                    + estadoConsulta
+                    + tiempoReservacionConsulta
+                    + cantidadEquipoConsulta
+                    + usuarioConsulta
+                    + equipoConsulta
+                    + canchaConsulta
+                    + horaReservacionConsulta
+                )
+            } else {
+                if (usuarioError == "" && equipoError == "" && canchaError == "") {
+                    const reservacionEditada = {
+                        id: Number(parametrosRuta.id),
+                        fechaRegistro: new Date(),
+                        fechaHoraReservacion: new Date(parametrosCuerpo.fechaHoraReservacion.toString() + " " + parametrosCuerpo.horaReservacion.toString()),
+                        tiempoReservacion: parametrosCuerpo.tiempoReservacion,
+                        estado: parametrosCuerpo.estado,
+                        usuario: usuarioEncontrado[0].id,
+                        cancha: canchaEncontrada[0].id
+                    } as ReservacionEntity
+                    let respuestaEdicionReservacion;
+                    try {
+                        respuestaEdicionReservacion = await this._reservacionService.editarUno(reservacionEditada)
+                    } catch (error) {
+                        console.error(error);
+                        return res.redirect("/reservaciones?error=Error editando reservación"+error)
+                    }
+                    let reservacionEncontrada
+                    try {
+                        reservacionEncontrada = await this._reservacionService.buscarUno(respuestaEdicionReservacion.id)
+                    } catch (error) {
+                        console.log("Error del servidor" + error)
+                        return res.redirect("/reservaciones?error=Error buscando reservación")
+                    }
+                    if (parametrosCuerpo.cantidadEquipo > 0) {
+                        const reservaEquipoEditada = {
+                            id: Number(reservacionEncontrada.reservacionEquipos[0].id),
+                            cantidad: parametrosCuerpo.cantidadEquipo,
+                            reservaciones: respuestaEdicionReservacion.id,
+                            equipos: equipoEncontrado[0].id
+                        } as ReservaEquipoEntity
+                        let respuestaReservaEquipoEditada;
+                        try {
+                            respuestaReservaEquipoEditada = await this._reservaEquipoService.editarUno(reservaEquipoEditada);
+                        } catch (error) {
+                            console.error(error+""+reservacionEncontrada.reservacionEquipos.id);
+                            return res.redirect("/reservaciones?error=Error editando reservación de equipos")
+                        }
+                    } else {
+                        console.error("Reservacion Equipos:" + parametrosCuerpo.cantidadEquipo);
+                    }
+                    console.error(parametrosCuerpo)
+                    return res.redirect("/reservaciones")
+                } else {
+                    console.error(usuarioError + equipoError + canchaError)
+                    return res.redirect("/reservaciones/editar?="
+                        + usuarioError
+                        + equipoError
+                        + canchaError
+                    )
+                }
+            }
+        } catch (error) {
+            console.error("Error", error);
+            throw new BadRequestException("Error validando" + error)
         }
     }
 }

@@ -55,6 +55,18 @@
 
 <% } %>
 
+<% let fechaFormateada = ""%>
+<% let hours= ""%>
+<% let minutes= ""%>
+<% console.log(fechaHoraReservacion+""+existeFechaHoraReservacion)%>
+<% if(existeFechaHoraReservacion){%>
+    <% fechaFormateada = fechaHoraReservacion.getFullYear()+'-'+(fechaHoraReservacion.getMonth()+1)+'-'+fechaHoraReservacion.getDate();%>
+    <% hours= fechaHoraReservacion.getHours();%>
+    <% minutes= fechaHoraReservacion.getMinutes();%>
+    <% if(hours === 0){hours="00"} %>
+    <% if(minutes === 0){minutes="00"} %>
+<% } %>
+
 <% const activeDict={
     "inicio": false,
     "reservacion":true,
@@ -85,7 +97,8 @@
                         id="inputCedula"
                         name="usuario"
                         value="<%= existeUsuario ? usuario : "" %>"
-                        placeholder="Ingrese el nombre del rol, por ejemplo usuario">
+                        placeholder="Ingrese el nombre del rol, por ejemplo usuario"
+                        <% existeReservacion? "readonly":"" %>>
                 <div class="invalid-feedback">
                     <%= existeUsuarioError ? usuarioError : "" %>
                 </div>
@@ -103,11 +116,6 @@
                 </select>
             </div>
         </div>
-        <%const fechaFormateada = fechaHoraReservacion.getFullYear()+'-'+(fechaHoraReservacion.getMonth()+1)+'-'+fechaHoraReservacion.getDate();%>
-        <%let hours= fechaHoraReservacion.getHours();%>
-        <%let minutes= fechaHoraReservacion.getMinutes();%>
-        <% if(hours == 0){hours="00"} %>
-        <% if(minutes == 0){minutes="00"} %>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputFecha">Fecha de reservación</label>
@@ -141,7 +149,6 @@
                         id="inputCancha"
                         class="form-control"
                         name="equipo">
-                    <% console.log(equipo)%>
                     <option selected><%= existeEquipo ? equipo : "Seleccione..." %></option>
                     <% equiposArray.forEach((equipoObjeto) => { %>
                         <option><%= equipoObjeto.nombre%></option>
@@ -155,7 +162,6 @@
                         class="form-control <%= existeCantidadEquipoError ? "is-invalid" : "" %>"
                         id="inputCantidad"
                         name="cantidadEquipo"
-                        <% console.log(cantidadEquipo)%>
                         value="<%= existeCantidadEquipo ? cantidadEquipo : "" %>">
                 <div class="invalid-feedback">
                     <%= existeCantidadEquipoError ? cantidadEquipoError : "" %>

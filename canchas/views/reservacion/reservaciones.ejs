@@ -76,7 +76,7 @@
                 <td><%= reservacionObjeto.cancha.nombre %></td>
                 <td><%= reservacionObjeto.estado%></td>
                 <td><%= fechaHoraReservacionFormateada%></td>
-                <td><%= reservacionObjeto.tiempoReservacion%></td>
+                <td><%= reservacionObjeto.tiempoReservacion + " horas"%></td>
                 <td>
                     <a href="/reservaciones/editar/<%= reservacionObjeto.id%>">
                         <button type="submit" class="btn btn-secondary">Detalles</button>
